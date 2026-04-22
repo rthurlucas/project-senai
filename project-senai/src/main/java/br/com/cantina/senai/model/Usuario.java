@@ -1,9 +1,17 @@
 package br.com.cantina.senai.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "usuario")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,4 +20,6 @@ public class Usuario {
     private String cpf;
     private String telefone;
 
+    @Enumerated
+    public TipoUsuario tipoUsuario;
 }
