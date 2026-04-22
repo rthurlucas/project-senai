@@ -22,4 +22,12 @@ public class Usuario {
 
     @Enumerated
     public TipoUsuario tipoUsuario;
+
+    public Usuario(Usuario usuario) {
+
+    }
+
+    public void excluir(){
+        this.nome = "Unknow";
+    }
 }
