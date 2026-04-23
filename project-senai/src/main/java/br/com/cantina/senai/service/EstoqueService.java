@@ -25,8 +25,28 @@ public class EstoqueService {
     }
 
     @Transactional
-    public List<Estoque> listarEstoque(){
-        Estoque estoqueSalvo = estoqueRepository.
+    public List<Estoque> listarTodos() {
+        return estoqueRepository.findAll();
+    }
+
+    @Transactional
+    public Estoque buscarPorId(Long id) {
+        return estoqueRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
+    }
+
+    @Transactional
+    public Estoque atualizar(Long id, Estoque dados) {
+        Estoque estoque = estoqueRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
+
+        return estoque;
+    }
+    @Transactional
+    public void excluir(Long id) {
+        if (!estoqueRepository.existsById(id)) {
+            throw new RuntimeException("Estoque não encontrado");
+        }
+        estoqueRepository.deleteById(id);
     }
 }
-
