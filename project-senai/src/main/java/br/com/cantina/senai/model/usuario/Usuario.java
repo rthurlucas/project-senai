@@ -1,6 +1,7 @@
 package br.com.cantina.senai.model.usuario;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class Usuario {
     private String cpf;
     private String telefone;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public TipoUsuario tipoUsuario;
 
     public Usuario(Usuario usuario) {
