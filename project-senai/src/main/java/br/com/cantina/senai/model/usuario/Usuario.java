@@ -1,4 +1,4 @@
-package br.com.cantina.senai.model;
+package br.com.cantina.senai.model.usuario;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
