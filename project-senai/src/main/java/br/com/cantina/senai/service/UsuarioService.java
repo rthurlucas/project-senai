@@ -27,7 +27,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public List<Usuario> listarUsuarios(@PathVariable Long id){
+    public List<Usuario> listarUsuarios(Long id){
         Usuario usuario = usuarioRepository.getReferenceById(id);
         return usuarioRepository.findAllById(id);
     }
@@ -37,8 +37,19 @@ public class UsuarioService {
         if (!usuarioRepository.existsById(id)){
             throw new UsuarioNotFound("Usuario nao encontrado");
         }
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(()-> new RuntimeException("Usuario nao encontrado"));
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(()-> new UsuarioNotFound("Usuario nao encontrado"));
         usuario.excluir();
         usuarioRepository.save(usuario);
     }
+    @Transactional
+    public Usuario atualizar(Long id, Usuario usuarioAtualizado) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNotFound("Usuário não encontrado"));
+        usuario.setNome(usuarioAtualizado.getNome());
+        usuario.setCpf(usuarioAtualizado.getCpf());
+        return usuarioRepository.save(usuario);
+    }
+
+
 }
+

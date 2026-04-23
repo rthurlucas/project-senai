@@ -2,6 +2,7 @@ package br.com.cantina.senai.service;
 
 import br.com.cantina.senai.model.estoque.Estoque;
 import br.com.cantina.senai.model.estoque.EstoqueRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +13,20 @@ public class EstoqueService {
     private final EstoqueRepository estoqueRepository;
 
     @Autowired
-    public EstoqueService(EstoqueRepository estoqueRepository){
+    public EstoqueService(EstoqueRepository estoqueRepository) {
         this.estoqueRepository = estoqueRepository;
     }
 
-    public List<Estoque> listarEstoque() {
-        return estoqueRepository.findAll();
+    @Transactional
+    public Estoque cadastrar(Estoque dados) {
+        Estoque estoqueSalvo = new Estoque(dados);
+        estoqueRepository.save(estoqueSalvo);
+        return estoqueSalvo;
     }
 
-    public void atualizarEstoque(Estoque estoque){
-
+    @Transactional
+    public List<Estoque> listarEstoque(){
+        Estoque estoqueSalvo = estoqueRepository.
     }
 }
+
