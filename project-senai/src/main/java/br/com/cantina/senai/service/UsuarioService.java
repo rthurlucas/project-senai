@@ -28,16 +28,15 @@ public class UsuarioService {
 
     @Transactional
     public List<Usuario> listarUsuarios(@PathVariable Long id){
-        Usuario usuario = usuarioRepository.getReferenceById(id);
-        return usuarioRepository.findAllById(id);
+        return usuarioRepository.findAll();
     }
 
     @Transactional
-    public void excluirUsuarios(Long id){
-        if (!usuarioRepository.existsById(id)){
+    public void excluirUsuarios(Long idUsuario){
+        if (!usuarioRepository.existsById(idUsuario)){
             throw new UsuarioNotFound("Usuario nao encontrado");
         }
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(()-> new RuntimeException("Usuario nao encontrado"));
+        Usuario usuario = usuarioRepository.getReferenceById(idUsuario);
         usuario.excluir();
         usuarioRepository.save(usuario);
     }
