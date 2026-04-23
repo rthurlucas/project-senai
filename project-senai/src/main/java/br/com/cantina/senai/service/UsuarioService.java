@@ -1,15 +1,12 @@
 package br.com.cantina.senai.service;
 
-import br.com.cantina.senai.model.DTOCadastroUsuario;
-import br.com.cantina.senai.model.Usuario;
-import br.com.cantina.senai.repository.UsuarioRepository;
+import br.com.cantina.senai.model.usuario.Usuario;
+import br.com.cantina.senai.model.usuario.UsuarioNotFound;
+import br.com.cantina.senai.model.usuario.UsuarioRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -24,10 +21,9 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario cadastrarUsuario(@RequestBody @Valid Usuario dados){
+    public Usuario cadastrarUsuario(Usuario dados){
         Usuario usuario = new Usuario(dados);
-        usuarioRepository.save(usuario);
-        return usuarioRepository.save(dados);
+        return usuarioRepository.save(usuario);
     }
 
     @Transactional
@@ -38,8 +34,11 @@ public class UsuarioService {
 
     @Transactional
     public void excluirUsuarios(Long id){
-        Usuario usuario = new Usuario();
+        if (!usuarioRepository.existsById(id)){
+            throw new UsuarioNotFound("Usuario nao encontrado");
+        }
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(()-> new RuntimeException("Usuario nao encontrado"));
         usuario.excluir();
-        return usuarioRepository.delete();
+        usuarioRepository.save(usuario);
     }
 }
