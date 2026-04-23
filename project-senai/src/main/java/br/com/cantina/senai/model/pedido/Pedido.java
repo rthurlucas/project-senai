@@ -1,5 +1,7 @@
-package br.com.cantina.senai.model;
+package br.com.cantina.senai.model.pedido;
 
+import br.com.cantina.senai.model.produto.Produto;
+import br.com.cantina.senai.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,4 +23,8 @@ public class Pedido {
     @ManyToOne
     @JoinColumn(name = "id_produto")
     private Produto produto;
+
+    public Pedido(Pedido pedido){
+
+    }
 }
