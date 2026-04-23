@@ -37,7 +37,7 @@ public class UsuarioService {
         if (!usuarioRepository.existsById(id)){
             throw new UsuarioNotFound("Usuario nao encontrado");
         }
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(()-> new UsuarioNotFound("Usuario nao encontrado"));
+        Usuario usuario = usuarioRepository.getReferenceById(id);
         usuario.excluir();
         usuarioRepository.save(usuario);
     }
