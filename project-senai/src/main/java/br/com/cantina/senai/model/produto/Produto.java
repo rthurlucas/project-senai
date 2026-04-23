@@ -1,4 +1,4 @@
-package br.com.cantina.senai.model;
+package br.com.cantina.senai.model.produto;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,7 +1,6 @@
-package br.com.cantina.senai.model;
+package br.com.cantina.senai.model.usuario;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 
 public record DTOCadastroUsuario(
         @NotBlank
