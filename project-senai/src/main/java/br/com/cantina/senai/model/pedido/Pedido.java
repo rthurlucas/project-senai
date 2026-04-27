@@ -27,4 +27,8 @@ public class Pedido {
     public Pedido(Pedido pedido){
 
     }
+
+    public void atualizarInformacoesPedido(Pedido pedido){
+
+    }
 }
