@@ -23,26 +23,8 @@ public class PedidoService {
     }
 
     @Transactional
-    public void criarPedido(@RequestBody @Valid Pedido dados){
+    public void criarPedido(Pedido dados){
         Pedido pedido = new Pedido(dados);
         pedidoRepository.save(pedido);
-    }
-
-    @Transactional
-    public List<Pedido> listarPedido(Long idPedido){
-        return pedidoRepository.findAll();
-    }
-
-    @Transactional
-    public Usuario buscarPedido(Long idPedido){
-        return pedidoRepository.findPedidoByIdPedido(idPedido);
-    }
-
-    @Transactional
-    public void excluirPedido(Long idPedido){
-        if (!pedidoRepository.existsById(idPedido)){
-            throw new PedidoNotFound("Id do Pedido nao encontrado ID: " + idPedido);
-        }
-       pedidoRepository.deleteById(idPedido);
     }
 }
