@@ -27,4 +27,26 @@ public class PedidoService {
         Pedido pedido = new Pedido(dados);
         pedidoRepository.save(pedido);
     }
+
+    @Transactional
+    public List<Pedido> listarPedido(Long idPedido){
+        return pedidoRepository.findAll();
+    }
+
+    @Transactional
+    public Pedido buscarPedido(Long idPedido){
+        if (!pedidoRepository.existsById(idPedido)){
+            throw new PedidoNotFound("Pedido nao existe ID: " + idPedido + " Nao foi possivel encontralo");
+        }
+        return pedidoRepository.getReferenceById(idPedido);
+
+    }
+
+    @Transactional
+    public void excluirPedido(Long idPedido){
+        if (!pedidoRepository.existsById(idPedido)){
+            throw new PedidoNotFound("Esse Id nao existe: " + idPedido);
+        }
+        pedidoRepository.deleteById(idPedido);
+    }
 }
