@@ -35,7 +35,11 @@ public class PedidoService {
 
     @Transactional
     public Pedido buscarPedido(Long idPedido){
+        if (!pedidoRepository.existsById(idPedido)){
+            throw new PedidoNotFound("Pedido nao existe ID: " + idPedido + " Nao foi possivel encontralo");
+        }
         return pedidoRepository.getReferenceById(idPedido);
+
     }
 
     @Transactional
