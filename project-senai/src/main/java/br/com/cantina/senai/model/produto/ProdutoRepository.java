@@ -1,4 +1,6 @@
 package br.com.cantina.senai.model.produto;
 
-public interface ProdutoRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 }
