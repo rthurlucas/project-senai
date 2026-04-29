@@ -16,6 +16,9 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     public TipoUsuario tipoUsuario;
 
+    public Usuario(Usuario dados) {
+    }
+
     public void excluir(){
         this.nome = "Unknow";
     }
