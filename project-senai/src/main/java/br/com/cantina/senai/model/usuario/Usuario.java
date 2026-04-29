@@ -8,12 +8,14 @@ import jakarta.persistence.*;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Long id;
     private String nome;
     private String cpf;
     private String telefone;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo")
     public TipoUsuario tipoUsuario;
 
     public Usuario(Usuario dados) {
