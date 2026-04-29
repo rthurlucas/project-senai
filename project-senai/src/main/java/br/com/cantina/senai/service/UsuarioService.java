@@ -1,12 +1,11 @@
 package br.com.cantina.senai.service;
 
 import br.com.cantina.senai.model.usuario.Usuario;
-import br.com.cantina.senai.model.usuario.UsuarioNotFound;
+import br.com.cantina.senai.model.usuario.UsuarioNotFoundException;
 import br.com.cantina.senai.model.usuario.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public List<Usuario> listarUsuarios(@PathVariable Long id){
+    public List<Usuario> listarUsuarios(Long id){
         Usuario usuario = usuarioRepository.getReferenceById(id);
         return usuarioRepository.findAllById(id);
     }
@@ -35,7 +34,7 @@ public class UsuarioService {
     @Transactional
     public void excluirUsuarios(Long idUsuario){
         if (!usuarioRepository.existsById(idUsuario)){
-            throw new UsuarioNotFound("Usuario nao encontrado");
+            throw new UsuarioNotFoundException("Usuario nao encontrado");
         }
         Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(()-> new RuntimeException("Usuario nao encontrado"));
         usuario.excluir();
@@ -44,7 +43,7 @@ public class UsuarioService {
     @Transactional
     public Usuario atualizar(Long id, Usuario usuarioAtualizado) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new UsuarioNotFound("Usuário não encontrado"));
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado"));
         usuario.setNome(usuarioAtualizado.getNome());
         usuario.setCpf(usuarioAtualizado.getCpf());
         return usuarioRepository.save(usuario);
