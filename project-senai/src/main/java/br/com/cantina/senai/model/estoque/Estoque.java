@@ -2,15 +2,9 @@ package br.com.cantina.senai.model.estoque;
 
 import br.com.cantina.senai.model.produto.Produto;
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
 @Table(name = "estoque")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 public class Estoque {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +16,15 @@ public class Estoque {
 
     private Integer quantidade;
 
-    public Estoque(Estoque estoque){
+    public Estoque(){
 
     }
+
+    public Estoque(Long idEstoque, Produto idProduto, Integer quantidade) {
+        this.idEstoque = idEstoque;
+        this.idProduto = idProduto;
+        this.quantidade = quantidade;
+    }
+
+
 }

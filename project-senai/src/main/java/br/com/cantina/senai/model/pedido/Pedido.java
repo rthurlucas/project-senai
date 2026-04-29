@@ -3,15 +3,9 @@ package br.com.cantina.senai.model.pedido;
 import br.com.cantina.senai.model.produto.Produto;
 import br.com.cantina.senai.model.usuario.Usuario;
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
 @Table(name = "pedido")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class Pedido {
 
     @Id
@@ -30,5 +24,38 @@ public class Pedido {
 
     public void atualizarInformacoesPedido(Pedido pedido){
 
+    }
+
+    public Pedido(Long idPedido, Usuario usuario, Produto produto) {
+        this.idPedido = idPedido;
+        this.usuario = usuario;
+        this.produto = produto;
+    }
+
+    public Pedido() {
+    }
+
+    public Long getIdPedido() {
+        return idPedido;
+    }
+
+    public void setIdPedido(Long idPedido) {
+        this.idPedido = idPedido;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
 }

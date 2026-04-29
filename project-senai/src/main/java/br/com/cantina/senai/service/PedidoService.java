@@ -1,15 +1,11 @@
 package br.com.cantina.senai.service;
 
-import br.com.cantina.senai.model.estoque.Estoque;
 import br.com.cantina.senai.model.pedido.Pedido;
-import br.com.cantina.senai.model.pedido.PedidoNotFound;
+import br.com.cantina.senai.model.pedido.PedidoNotFoundException;
 import br.com.cantina.senai.model.pedido.PedidoRepository;
-import br.com.cantina.senai.model.usuario.Usuario;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -23,9 +19,10 @@ public class PedidoService {
     }
 
     @Transactional
-    public void criarPedido(Pedido dados){
+    public Pedido criarPedido(Pedido dados){
         Pedido pedido = new Pedido(dados);
         pedidoRepository.save(pedido);
+        return pedido;
     }
 
     @Transactional
@@ -35,17 +32,13 @@ public class PedidoService {
 
     @Transactional
     public Pedido buscarPedido(Long idPedido){
-        if (!pedidoRepository.existsById(idPedido)){
-            throw new PedidoNotFound("Pedido nao existe ID: " + idPedido + " Nao foi possivel encontralo");
-        }
-        return pedidoRepository.getReferenceById(idPedido);
-
+        return pedidoRepository.findById(idPedido).orElseThrow(() -> new PedidoNotFoundException("Pedido nao encontrado: ID" + idPedido));
     }
 
     @Transactional
     public void excluirPedido(Long idPedido){
         if (!pedidoRepository.existsById(idPedido)){
-            throw new PedidoNotFound("Esse Id nao existe: " + idPedido);
+            throw new PedidoNotFoundException("Esse Id nao existe: " + idPedido);
         }
         pedidoRepository.deleteById(idPedido);
     }
