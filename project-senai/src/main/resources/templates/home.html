@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="">
+<head>
+    <meta charset="UTF-8">
+    <title>Cardápio – Cantina SENAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script th:src="@{/js/home.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+
+
+<nav class="navbar">
+    <div class="nav-logo">
+        <div class="senai-block">SENAI</div>
+        <div class="nav-divider"></div>
+        <span class="nav-titulo">Cantina SENAI</span>
+    </div>
+    <div class="nav-right">
+        <div class="nav-user">
+            <div class="nav-avatar"
+                 th:text="${#strings.toUpperCase(#strings.substring(usuario.nome, 0, 2))}">BA</div>
+            <span th:text="${usuario.nome}">Usuário</span>
+        </div>
+        <a class="btn-sair" th:href="@{/logout}">Sair</a>
+    </div>
+</nav>
+
+
+<div class="hero">
+    <p class="hero-eyebrow">Cardápio do dia</p>
+    <h1 class="hero-title">O que vai querer hoje?</h1>
+    <p class="hero-sub" id="dataHoje"></p>
+</div>
+
+
+<div class="filtros-wrap">
+    <input class="search-input" type="text" placeholder="Buscar item..."
+           id="busca" oninput="filtrar()"/>
+    <button class="filtro-btn active" onclick="setCategoria('todos', this)">Todos</button>
+    <button class="filtro-btn" onclick="setCategoria('lanche', this)">Lanche</button>
+    <button class="filtro-btn" onclick="setCategoria('bebida', this)">Bebida</button>
+    <button class="filtro-btn" onclick="setCategoria('sobremesa', this)">Sobremesa</button>
+</div>
+
+
+<div class="main">
+    <div class="section-label">Itens disponíveis</div>
+    <div class="card-grid" id="grid"></div>
+    <p class="vazio" id="vazio" style="display:none;">Nenhum item encontrado.</p>
+</div>
+
+<!-- CART BAR -->
+<div class="cart-bar hidden" id="cartBar">
+    <div class="cart-info">
+        <div class="cart-badge" id="cartQtd">0</div>
+        <span id="cartLabel">itens</span>
+    </div>
+    <span class="cart-total" id="cartTotal">R$ 0,00</span>
+    <a class="btn-finalizar" th:href="@{/pedido/finalizar}">Ver pedido →</a>
+</div>
+
+<script th:src="@{/js/home.js}"></script>
+</body>
+</html>

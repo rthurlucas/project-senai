@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Finalizar Pedido – Cantina SENAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/finalizar-pedido.css}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-logo">
+        <div class="senai-block">SENAI</div>
+        <div class="nav-divider"></div>
+        <span class="nav-titulo">Cantina SENAI</span>
+    </div>
+    <a class="btn-voltar" th:href="@{/home}">← Voltar ao cardápio</a>
+</nav>
+
+<!-- CONTEÚDO -->
+<div class="page">
+
+    <!-- CABEÇALHO -->
+    <div class="page-header">
+        <p class="page-eyebrow">Revisão do pedido</p>
+        <h1 class="page-title">Finalizar pedido</h1>
+    </div>
+
+    <!-- COLUNA ESQUERDA: itens -->
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-titulo">Itens selecionados</span>
+                <span class="card-header-badge" id="qtdBadge">0 itens</span>
+            </div>
+            <div class="item-lista" id="listaItens">
+                <p class="vazio-msg">Nenhum item no carrinho.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- COLUNA DIREITA: resumo + pagamento -->
+    <div class="resumo-card">
+        <div class="card" style="margin-bottom:14px">
+            <div class="card-header">
+                <span class="card-header-titulo">Forma de pagamento</span>
+            </div>
+            <div class="pagamento-opts">
+                <button class="pag-btn selected" onclick="setPag(this)">
+                    <span class="pag-icon">💳</span>
+                    <span class="pag-label">Cartão</span>
+                </button>
+                <button class="pag-btn" onclick="setPag(this)">
+                    <span class="pag-icon">💵</span>
+                    <span class="pag-label">Dinheiro</span>
+                </button>
+                <button class="pag-btn" onclick="setPag(this)">
+                    <span class="pag-icon">📱</span>
+                    <span class="pag-label">Pix</span>
+                </button>
+                <button class="pag-btn" onclick="setPag(this)">
+                    <span class="pag-icon">🏷️</span>
+                    <span class="pag-label">Saldo SENAI</span>
+                </button>
+            </div>
+            <div class="obs-wrap">
+                <span class="obs-label">Observações (opcional)</span>
+                <textarea class="obs-input" rows="2"
+                          placeholder="Ex: sem cebola, alergia a glúten..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <div id="resumoLinhas"></div>
+            <div class="resumo-total-linha">
+                <span class="resumo-total-label">Total</span>
+                <span class="resumo-total-valor" id="totalValor">R$ 0,00</span>
+            </div>
+            <button class="btn-confirmar" id="btnConfirmar" onclick="confirmar()" disabled>
+                Confirmar pedido
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- MODAL SUCESSO -->
+<div class="modal-overlay" id="modalSucesso">
+    <div class="modal">
+        <div class="modal-icon">✅</div>
+        <p class="modal-titulo">Pedido enviado!</p>
+        <p class="modal-sub">Seu pedido foi recebido e está sendo preparado.</p>
+        <p class="modal-num" id="numPedido">#0042</p>
+        <p class="modal-num-label">Número do pedido</p>
+        <button class="btn-modal" onclick="window.location.href='/'">Voltar ao início</button>
+    </div>
+</div>
+
+<script th:src="@{/js/finalizar-pedido.js}"></script>
+</body>
+</html>
