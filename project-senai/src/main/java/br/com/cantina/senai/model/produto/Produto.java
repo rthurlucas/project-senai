@@ -1,50 +1,28 @@
 package br.com.cantina.senai.model.produto;
 
+import br.com.cantina.senai.dto.DTOCadastroProduto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "produto")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProduto;
-    private String descricaoProduto;
+    @Column(name = "nome_produto")
     private String nomeProduto;
+    @Column(name = "descricao_produto")
+    private String descricaoProduto;
 
-    public Produto(Long idProduto, String descricaoProduto, String nomeProduto) {
-        this.idProduto = idProduto;
-        this.descricaoProduto = descricaoProduto;
-        this.nomeProduto = nomeProduto;
-    }
+    public Produto(DTOCadastroProduto produto) {
 
-    public Produto() {
-
-    }
-
-    public Produto(Produto produto) {
-    }
-
-    public Long getIdProduto() {
-        return idProduto;
-    }
-
-    public void setIdProduto(Long idProduto) {
-        this.idProduto = idProduto;
-    }
-
-    public String getDescricaoProduto() {
-        return descricaoProduto;
-    }
-
-    public void setDescricaoProduto(String descricaoProduto) {
-        this.descricaoProduto = descricaoProduto;
-    }
-
-    public String getNomeProduto() {
-        return nomeProduto;
-    }
-
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
     }
 }
