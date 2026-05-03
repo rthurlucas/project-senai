@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cantina SENAI</title>
-    <link rel="stylesheet" th:href="">
+    <link rel="stylesheet" th:href="@{/login.css}">
 </head>
 <body>
 
@@ -60,7 +60,7 @@
 
         </div>
 
-        <form th:action="" method="post">
+        <form th:action="@{/login}" method="post">
             <input type="hidden" id="perfil" name="perfil" value="USUARIO" />
 
             <div class="form-group">
@@ -72,12 +72,12 @@
                 <input type="password" name="senha" placeholder="••••••••" required />
             </div>
 
-            <p th:if="" class="erro-msg" th:text=""></p>
+            <p th:if="${erro != null}" class="erro-msg" th:text="${erro}"></p>
 
             <button type="submit" class="btn-entrar">Entrar</button>
         </form>
 
-        <p class="forgot"><a th:href="">Esqueci minha senha</a></p>
+        <p class="forgot"><a href="#">Esqueci minha senha</a></p>
         <div class="footer-bar"></div>
     </div>
 </div>
