@@ -3,15 +3,19 @@ package br.com.cantina.senai.service;
 import br.com.cantina.senai.dto.DTOAtualizarProduto;
 import br.com.cantina.senai.dto.DTOCadastroProduto;
 import br.com.cantina.senai.dto.DTODetalhamentoProduto;
+import br.com.cantina.senai.dto.DTOListagemProduto;
+import br.com.cantina.senai.model.estoque.Estoque;
 import br.com.cantina.senai.model.produto.Produto;
-import br.com.cantina.senai.model.produto.ProdutoNameException;
-import br.com.cantina.senai.model.produto.ProdutoNotFoundException;
-import br.com.cantina.senai.model.produto.ProdutoRepository;
+import br.com.cantina.senai.exceptions.ProdutoNameException;
+import br.com.cantina.senai.exceptions.ProdutoNotFoundException;
+import br.com.cantina.senai.repositorys.PedidoRepository;
+import br.com.cantina.senai.repositorys.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -19,7 +23,7 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
 
     @Autowired
-    public ProdutoService(ProdutoRepository produtoRepository){
+    public ProdutoService(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
     }
 
@@ -30,8 +34,11 @@ public class ProdutoService {
         return new DTODetalhamentoProduto(produto);
     }
 
-    public List<Produto> listarProduto(Long id){
-        return produtoRepository.findAll();
+    public List<DTOListagemProduto> listarProdutos() {
+        return produtoRepository.findAll()
+                .stream()
+                .map(DTOListagemProduto::new)
+                .collect(Collectors.toList());
     }
 
     public DTODetalhamentoProduto buscarProdutoPorId(Long idProduto){
