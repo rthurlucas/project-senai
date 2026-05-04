@@ -12,4 +12,10 @@ public class LoginController {
     public String exibirLogin() {
         return "login";
     }
+
+    @GetMapping("/home")
+    @RequestMapping("/home")
+    public String exibirHome() {
+        return "home";
+    }
 }
