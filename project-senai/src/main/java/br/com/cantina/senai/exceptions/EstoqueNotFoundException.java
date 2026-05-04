@@ -1,4 +1,4 @@
-package br.com.cantina.senai.model.estoque;
+package br.com.cantina.senai.exceptions;
 
 public class EstoqueNotFoundException extends RuntimeException {
     public EstoqueNotFoundException(String message) {

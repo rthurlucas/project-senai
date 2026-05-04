@@ -1,4 +1,4 @@
-package br.com.cantina.senai.model.usuario;
+package br.com.cantina.senai.exceptions;
 
 public class UsuarioNotFoundException extends RuntimeException {
     public UsuarioNotFoundException(String message) {
