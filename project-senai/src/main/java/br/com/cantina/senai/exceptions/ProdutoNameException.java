@@ -1,4 +1,4 @@
-package br.com.cantina.senai.model.produto;
+package br.com.cantina.senai.exceptions;
 
 public class ProdutoNameException extends RuntimeException {
     public ProdutoNameException(String message) {
