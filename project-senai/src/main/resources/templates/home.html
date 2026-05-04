@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Cardápio – Cantina SENAI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <script th:src="@{/js/home.js}"></script>
     <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
@@ -26,7 +25,6 @@
         <a class="btn-sair" th:href="@{/logout}">Sair</a>
     </div>
 </nav>
-
 
 <div class="hero">
     <p class="hero-eyebrow">Cardápio do dia</p>
