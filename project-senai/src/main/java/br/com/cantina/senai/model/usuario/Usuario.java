@@ -18,13 +18,15 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
-    private Long id;
+    private Long idUsuario;
     @Column(name = "nome")
     private String nome;
     @Column(name = "cpf")
     private String cpf;
     @Column(name = "telefone")
     private String telefone;
+    @Column(name = "email")
+    private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
@@ -33,8 +35,4 @@ public class Usuario {
   public Usuario(DTOCadastroUsuario usuario){
 
   }
-
-    public void excluir(){
-        this.nome = "Unknow";
-    }
 }
