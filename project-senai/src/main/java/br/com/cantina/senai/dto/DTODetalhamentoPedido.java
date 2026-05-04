@@ -6,7 +6,7 @@ import br.com.cantina.senai.model.usuario.Usuario;
 
 public record DTODetalhamentoPedido(
         Long idPedido,
-        Usuario idusuario,
+        Usuario idUsuario,
         Produto idProduto
 ) {
     public DTODetalhamentoPedido(Pedido pedido){

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record DTOAtualizarPedido(
         @NotNull
-        Long produto,
+        Long idProduto,
         @NotNull
         @Min(0)
         Integer quantidade

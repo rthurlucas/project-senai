@@ -1,11 +1,22 @@
 package br.com.cantina.senai.dto;
 
 import br.com.cantina.senai.model.usuario.TipoUsuario;
+import br.com.cantina.senai.model.usuario.Usuario;
 
 public record DTOListagemUsuario(
-        Long id,
+        Long idUsuario,
         String nome,
-        String cpf,
+        String telefone,
+        String email,
         TipoUsuario tipoUsuario
 ) {
+        public DTOListagemUsuario(Usuario usuario) {
+                this(
+                        usuario.getIdUsuario(),
+                        usuario.getNome(),
+                        usuario.getTelefone(),
+                        usuario.getEmail(),
+                        usuario.getTipoUsuario()
+                );
+        }
 }

@@ -10,6 +10,8 @@ public record DTOAtualizarUsuario(
         String nome,
         @NotNull
         String telefone,
+        @NotBlank
+        String email,
         @NotNull
         TipoUsuario tipoUsuario
 ) {
@@ -17,6 +19,7 @@ public record DTOAtualizarUsuario(
         this(
                 usuario.getNome(),
                 usuario.getTelefone(),
+                usuario.getEmail(),
                 usuario.getTipoUsuario()
         );
     }

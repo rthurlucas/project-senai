@@ -1,6 +1,6 @@
 package br.com.cantina.senai.dto;
 
-public record DTOListgemrEstoque(
+public record DTOListgemEstoque(
         Long idEstoque,
         Long idProduto,
         Integer quantidade
