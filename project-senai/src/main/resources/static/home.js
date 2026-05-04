@@ -1,19 +1,78 @@
-/* ── DADOS (substituir por dados vindos do backend via Thymeleaf) ── */
-const produtos = [
-    { id:1,  nome:'X-Burguer',       desc:'Pão, carne, queijo e alface',      preco:6.50, emoji:'🍔', bg:'bg-rosa',    cat:'lanche',    disponivel:true  },
-    { id:2,  nome:'Coxinha',          desc:'Recheio de frango cremoso',         preco:3.50, emoji:'🍗', bg:'bg-amarelo', cat:'lanche',    disponivel:true  },
-    { id:3,  nome:'Pão na chapa',     desc:'Com manteiga e queijo',            preco:2.50, emoji:'🥪', bg:'bg-amarelo', cat:'lanche',    disponivel:true  },
-    { id:4,  nome:'Pastel de queijo', desc:'Massa crocante, queijo derretido', preco:4.00, emoji:'🥐', bg:'bg-laranja', cat:'lanche',    disponivel:true  },
-    { id:5,  nome:'Suco de laranja',  desc:'Natural, 300ml',                   preco:4.00, emoji:'🍊', bg:'bg-laranja', cat:'bebida',    disponivel:true  },
-    { id:6,  nome:'Refrigerante',     desc:'Lata 350ml gelada',                preco:3.00, emoji:'🥤', bg:'bg-azul',    cat:'bebida',    disponivel:true  },
-    { id:7,  nome:'Vitamina',         desc:'Banana com leite e mel',           preco:4.50, emoji:'🥛', bg:'bg-roxo',    cat:'bebida',    disponivel:true  },
-    { id:8,  nome:'Água mineral',     desc:'Garrafa 500ml',                    preco:2.00, emoji:'💧', bg:'bg-azul',    cat:'bebida',    disponivel:false },
-    { id:9,  nome:'Pudim',            desc:'Pudim de leite condensado',        preco:3.50, emoji:'🍮', bg:'bg-amarelo', cat:'sobremesa', disponivel:true  },
-    { id:10, nome:'Bolo de cenoura',  desc:'Com cobertura de chocolate',       preco:4.00, emoji:'🍰', bg:'bg-rosa',    cat:'sobremesa', disponivel:true  },
-];
+/* ── DADOS (buscados do backend) ── */
+let produtos = [];
+let produtosMapeados = {}; // Será preenchido com mapeamento de ID para dados UI
 
 let carrinho = {};
 let catAtual = 'todos';
+
+/* ── MAPEAMENTO ESTÁTICO DE DADOS UI ── */
+const dadosUI = {
+    1: { emoji: '🍔', cat: 'lanche', bg: 'bg-rosa' },
+    2: { emoji: '🍗', cat: 'lanche', bg: 'bg-amarelo' },
+    3: { emoji: '🥪', cat: 'lanche', bg: 'bg-amarelo' },
+    4: { emoji: '🥐', cat: 'lanche', bg: 'bg-laranja' },
+    5: { emoji: '🍊', cat: 'bebida', bg: 'bg-laranja' },
+    6: { emoji: '🥤', cat: 'bebida', bg: 'bg-azul' },
+    7: { emoji: '🥛', cat: 'bebida', bg: 'bg-roxo' },
+    8: { emoji: '💧', cat: 'bebida', bg: 'bg-azul' },
+    9: { emoji: '🍮', cat: 'sobremesa', bg: 'bg-amarelo' },
+    10: { emoji: '🍰', cat: 'sobremesa', bg: 'bg-rosa' }
+};
+
+/* ── CARREGAR PRODUTOS DO BACKEND ── */
+function carregarProdutos() {
+    fetch('/api/produtos')
+        .then(response => {
+            if (!response.ok) throw new Error('Erro ao carregar produtos');
+            return response.json();
+        })
+        .then(data => {
+            produtos = data;
+            // Mesclar produtos com dados UI
+            produtosMapeados = {};
+            produtos.forEach(p => {
+                const ui = dadosUI[p.idProduto] || { emoji: '🍔', cat: 'lanche', bg: 'bg-rosa' };
+                produtosMapeados[p.idProduto] = { ...p, ...ui, disponivel: true };
+            });
+            renderGrid();
+            restaurarCarrinho();
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            // Fallback com dados locais em caso de erro
+            usarDadosLocais();
+        });
+}
+
+/* ── DADOS DE FALLBACK ── */
+function usarDadosLocais() {
+    const produtosLocais = [
+        { idProduto:1,  nomeProduto:'X-Burguer',       descricaoProduto:'Pão, carne, queijo e alface',      preco:6.50, emoji:'🍔', bg:'bg-rosa',    cat:'lanche',    disponivel:true  },
+        { idProduto:2,  nomeProduto:'Coxinha',          descricaoProduto:'Recheio de frango cremoso',         preco:3.50, emoji:'🍗', bg:'bg-amarelo', cat:'lanche',    disponivel:true  },
+        { idProduto:3,  nomeProduto:'Pão na chapa',     descricaoProduto:'Com manteiga e queijo',            preco:2.50, emoji:'🥪', bg:'bg-amarelo', cat:'lanche',    disponivel:true  },
+        { idProduto:4,  nomeProduto:'Pastel de queijo', descricaoProduto:'Massa crocante, queijo derretido', preco:4.00, emoji:'🥐', bg:'bg-laranja', cat:'lanche',    disponivel:true  },
+        { idProduto:5,  nomeProduto:'Suco de laranja',  descricaoProduto:'Natural, 300ml',                   preco:4.00, emoji:'🍊', bg:'bg-laranja', cat:'bebida',    disponivel:true  },
+        { idProduto:6,  nomeProduto:'Refrigerante',     descricaoProduto:'Lata 350ml gelada',                preco:3.00, emoji:'🥤', bg:'bg-azul',    cat:'bebida',    disponivel:true  },
+        { idProduto:7,  nomeProduto:'Vitamina',         descricaoProduto:'Banana com leite e mel',           preco:4.50, emoji:'🥛', bg:'bg-roxo',    cat:'bebida',    disponivel:true  },
+        { idProduto:8,  nomeProduto:'Água mineral',     descricaoProduto:'Garrafa 500ml',                    preco:2.00, emoji:'💧', bg:'bg-azul',    cat:'bebida',    disponivel:false },
+        { idProduto:9,  nomeProduto:'Pudim',            descricaoProduto:'Pudim de leite condensado',        preco:3.50, emoji:'🍮', bg:'bg-amarelo', cat:'sobremesa', disponivel:true  },
+        { idProduto:10, nomeProduto:'Bolo de cenoura',  descricaoProduto:'Com cobertura de chocolate',       preco:4.00, emoji:'🍰', bg:'bg-rosa',    cat:'sobremesa', disponivel:true  },
+    ];
+    produtosMapeados = {};
+    produtosLocais.forEach(p => {
+        produtosMapeados[p.idProduto] = p;
+    });
+    renderGrid();
+}
+
+/* ── RESTAURAR CARRINHO ── */
+function restaurarCarrinho() {
+    const carrinhoSalvo = sessionStorage.getItem('carrinho');
+    if (carrinhoSalvo) {
+        carrinho = JSON.parse(carrinhoSalvo);
+        atualizarCartBar();
+    }
+}
 
 /* ── DATA ── */
 (function() {
@@ -43,15 +102,16 @@ function renderGrid() {
     const vazio = document.getElementById('vazio');
     grid.innerHTML = '';
 
-    const filtrados = produtos.filter(p =>
+    const todosProdutos = Object.values(produtosMapeados);
+    const filtrados = todosProdutos.filter(p =>
         (catAtual === 'todos' || p.cat === catAtual) &&
-        p.nome.toLowerCase().includes(busca)
+        p.nomeProduto.toLowerCase().includes(busca)
     );
 
     vazio.style.display = filtrados.length === 0 ? 'block' : 'none';
 
     filtrados.forEach(p => {
-        const qtd  = carrinho[p.id] || 0;
+        const qtd  = carrinho[p.idProduto] || 0;
         const card = document.createElement('div');
         card.className = 'food-card' + (p.disponivel ? '' : ' esgotado');
         card.innerHTML = `
@@ -62,8 +122,8 @@ function renderGrid() {
                 </span>
             </div>
             <div class="card-body">
-                <p class="card-nome">${p.nome}</p>
-                <p class="card-desc">${p.desc}</p>
+                <p class="card-nome">${p.nomeProduto}</p>
+                <p class="card-desc">${p.descricaoProduto}</p>
                 <div class="card-footer">
                     <span class="card-preco">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
                     <button class="btn-add${qtd > 0 ? ' tem-qtd' : ''}"
@@ -88,7 +148,7 @@ function addItem(id) {
 function atualizarCartBar() {
     let qtdTotal = 0, total = 0;
     Object.keys(carrinho).forEach(id => {
-        const p = produtos.find(x => x.id == id);
+        const p = produtosMapeados[id];
         if (p) { qtdTotal += carrinho[id]; total += p.preco * carrinho[id]; }
     });
 
