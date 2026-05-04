@@ -1,18 +1,19 @@
 package br.com.cantina.senai.service;
 
-import br.com.cantina.senai.dto.DTOAtualizarEstoque;
 import br.com.cantina.senai.dto.DTOAtualizarUsuario;
 import br.com.cantina.senai.dto.DTOCadastroUsuario;
+import br.com.cantina.senai.dto.DTOListagemUsuario;
 import br.com.cantina.senai.dto.DTODetalhamentoUsuario;
 import br.com.cantina.senai.model.usuario.Usuario;
-import br.com.cantina.senai.model.usuario.UsuarioNotFoundException;
-import br.com.cantina.senai.model.usuario.UsuarioRepository;
+import br.com.cantina.senai.exceptions.UsuarioNotFoundException;
+import br.com.cantina.senai.repositorys.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -30,14 +31,21 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
     }
 
-    public List<Usuario> listarUsuarios(@PathVariable Long id){
-        return usuarioRepository.findAll();
+    public List<DTOListagemUsuario> listarUsuarios(@PathVariable Long id){
+        return usuarioRepository.findAll().stream()
+                .map(DTOListagemUsuario::new)
+                .collect(Collectors.toList());
     }
 
     public DTODetalhamentoUsuario buscarUsuarioPorId(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado"));
         return new DTODetalhamentoUsuario(usuario);
+    }
+
+    public Usuario buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado com email: " + email));
     }
 
     @Transactional
@@ -55,8 +63,6 @@ public class UsuarioService {
     public void excluirUsuarios(Long idUsuario){
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNotFoundException("Usuario nao encontrado"));
-        usuario.excluir();
-        usuarioRepository.save(usuario);
+        usuarioRepository.delete(usuario);
     }
 }
-
