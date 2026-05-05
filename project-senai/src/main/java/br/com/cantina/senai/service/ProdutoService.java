@@ -24,6 +24,8 @@ public class ProdutoService {
         this.produtoRepository = produtoRepository;
     }
 
+    //Crud Produto
+
     @Transactional
     public DTODetalhamentoProduto criarDescricaoProduto(DTOCadastroProduto dados){
         Produto produto = new Produto(dados);
@@ -53,7 +55,7 @@ public class ProdutoService {
     @Transactional
     public DTODetalhamentoProduto atualizarNomeProduto(DTOAtualizarProduto dados, Long idProduto){
         Produto produto = produtoRepository.findById(idProduto)
-                .orElseThrow(() -> new ProdutoNotFoundException("Produto nao encontrado pelo ID: " + idProduto));
+                .orElseThrow(() -> new ProdutoNameException("Produto nao encontrado pelo ID: " + idProduto));
         if (dados.nomeProduto() != null){
             produto.setNomeProduto(dados.nomeProduto());
         }
