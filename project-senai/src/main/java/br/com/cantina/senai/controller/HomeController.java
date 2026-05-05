@@ -6,21 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/home")
 public class HomeController {
 
-    private final ProdutoService produtoService;
     private final UsuarioService usuarioService;
+    private final ProdutoService produtoService;
 
     @Autowired
-    public HomeController(ProdutoService produtoService, UsuarioService usuarioService) {
-        this.produtoService = produtoService;
+    public HomeController(UsuarioService usuarioService, ProdutoService produtoService) {
         this.usuarioService = usuarioService;
+        this.produtoService = produtoService;
     }
 
-    @GetMapping("/home")
-    public String exibirHome(Model model) {
+    @GetMapping
+    public String home(Model model) {
+        model.addAttribute("usuarios", usuarioService.listarUsuarios(1L).get(0));
+        model.addAttribute("produtos", produtoService.listarProdutos());
         return "home";
     }
 }
