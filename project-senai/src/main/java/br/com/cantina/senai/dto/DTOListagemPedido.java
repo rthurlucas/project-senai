@@ -1,18 +1,21 @@
 package br.com.cantina.senai.dto;
 
 import br.com.cantina.senai.model.pedido.Pedido;
+import br.com.cantina.senai.model.pedido.StatusPedido;
 import br.com.cantina.senai.model.usuario.Usuario;
 
 public record DTOListagemPedido(
         Long idPedido,
         Usuario idUsuario,
-        Long idProduto
+        Long idProduto,
+        StatusPedido statusPedido
 ) {
         public DTOListagemPedido(Pedido pedido) {
                 this(
                         pedido.getIdPedido(),
                         pedido.getUsuario(),
-                        pedido.getProduto().getIdProduto()
+                        pedido.getProduto().getIdProduto(),
+                        pedido.getStatusPedido()
                 );
         }
 }
