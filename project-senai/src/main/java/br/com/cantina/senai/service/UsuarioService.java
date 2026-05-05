@@ -10,10 +10,8 @@ import br.com.cantina.senai.repositorys.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -26,15 +24,16 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void cadastrarUsuario(DTOCadastroUsuario dados) {
+    public DTODetalhamentoUsuario cadastrarUsuario(DTOCadastroUsuario dados) {
         Usuario usuario = new Usuario(dados);
         usuarioRepository.save(usuario);
+        return new DTODetalhamentoUsuario(usuario);
     }
 
-    public List<DTOListagemUsuario> listarUsuarios(@PathVariable Long id){
+    public List<DTOListagemUsuario> listarUsuarios(Object o){
         return usuarioRepository.findAll().stream()
                 .map(DTOListagemUsuario::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public DTODetalhamentoUsuario buscarUsuarioPorId(Long id) {
@@ -43,18 +42,28 @@ public class UsuarioService {
         return new DTODetalhamentoUsuario(usuario);
     }
 
-    public Usuario buscarPorEmail(String email) {
-        return usuarioRepository.findByEmail(email)
+    public DTODetalhamentoUsuario buscarPorEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado com email: " + email));
+        return new DTODetalhamentoUsuario(usuario);
     }
 
     @Transactional
     public DTODetalhamentoUsuario atualizar(Long id, DTOAtualizarUsuario usuarioAtualizado) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado"));
-        usuario.setNome(usuarioAtualizado.nome());
-        usuario.setTelefone(usuarioAtualizado.telefone());
-        usuario.setTipoUsuario(usuarioAtualizado.tipoUsuario());
+        if (usuarioAtualizado.nome() != null) {
+            usuario.setNome(usuarioAtualizado.nome());
+        }
+        if (usuarioAtualizado.telefone() != null) {
+            usuario.setTelefone(usuarioAtualizado.telefone());
+        }
+        if (usuarioAtualizado.email() != null) {
+            usuario.setEmail(usuarioAtualizado.email());
+        }
+        if (usuarioAtualizado.tipoUsuario() != null) {
+            usuario.setTipoUsuario(usuarioAtualizado.tipoUsuario());
+        }
         usuarioRepository.save(usuario);
         return new DTODetalhamentoUsuario(usuario);
     }

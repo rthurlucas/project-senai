@@ -32,7 +32,12 @@ public class Usuario {
     @Column(name = "tipo")
     private TipoUsuario tipoUsuario;
 
-  public Usuario(DTOCadastroUsuario usuario){
-
+  public Usuario(DTOCadastroUsuario dados){
+    this.idUsuario = idUsuario;
+    this.nome = dados.nome();
+    this.cpf = dados.cpf();
+    this.telefone = dados.telefone();
+    this.email = dados.email();
+    this.tipoUsuario = dados.tipoUsuario();
   }
 }
