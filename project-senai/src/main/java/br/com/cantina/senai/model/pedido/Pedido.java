@@ -28,6 +28,10 @@ public class Pedido {
     private Integer quantidadePedido;
     @Column(name = "data_pedido")
     private LocalDateTime dataPedido;
+    @Column(name = "")
+
+    @Enumerated(EnumType.STRING)
+    private StatusPedido statusPedido;
 
     public Pedido(DTOCadastroPedido dados) {
         this.quantidadePedido = quantidadePedido;
