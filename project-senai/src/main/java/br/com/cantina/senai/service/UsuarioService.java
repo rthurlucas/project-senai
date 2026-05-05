@@ -18,10 +18,11 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
+
+    //Crud Usuario
 
     @Transactional
     public DTODetalhamentoUsuario cadastrarUsuario(DTOCadastroUsuario dados) {
@@ -36,9 +37,9 @@ public class UsuarioService {
                 .toList();
     }
 
-    public DTODetalhamentoUsuario buscarUsuarioPorId(Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado"));
+    public DTODetalhamentoUsuario buscarUsuarioPorId(Long idUsuario) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado ID: " + idUsuario));
         return new DTODetalhamentoUsuario(usuario);
     }
 
@@ -49,9 +50,9 @@ public class UsuarioService {
     }
 
     @Transactional
-    public DTODetalhamentoUsuario atualizar(Long id, DTOAtualizarUsuario usuarioAtualizado) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado"));
+    public DTODetalhamentoUsuario atualizar(Long idUsuario, DTOAtualizarUsuario usuarioAtualizado) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado ID: " + idUsuario));
         if (usuarioAtualizado.nome() != null) {
             usuario.setNome(usuarioAtualizado.nome());
         }
