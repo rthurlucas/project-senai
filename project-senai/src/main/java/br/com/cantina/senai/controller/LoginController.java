@@ -2,20 +2,15 @@ package br.com.cantina.senai.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping
 public class LoginController {
 
     @GetMapping("/login")
-    @RequestMapping("/login")
     public String exibirLogin() {
         return "login";
-    }
-
-    @GetMapping("/home")
-    @RequestMapping("/home")
-    public String exibirHome() {
-        return "home";
     }
 }
