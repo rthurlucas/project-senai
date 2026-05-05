@@ -8,7 +8,6 @@ import br.com.cantina.senai.model.usuario.Usuario;
 import br.com.cantina.senai.exceptions.UsuarioNotFoundException;
 import br.com.cantina.senai.repositorys.UsuarioRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
