@@ -7,11 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record DTOCadastroUsuario(
-        @NotBlank
         String nome,
 
         @NotNull
-        @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")
+        @Pattern(regexp = "\\d{3}\\d{3}\\d{3}-\\d{2}")
         String cpf,
 
         @NotNull

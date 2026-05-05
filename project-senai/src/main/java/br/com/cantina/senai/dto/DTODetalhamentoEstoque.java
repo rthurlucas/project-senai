@@ -10,7 +10,7 @@ public record DTODetalhamentoEstoque(
     public DTODetalhamentoEstoque(Estoque estoque){
         this(
                 estoque.getIdEstoque(),
-                estoque.getIdProduto().getIdProduto(),
+                estoque.getProduto().getIdProduto(),
                 estoque.getQuantidade()
         );
     }

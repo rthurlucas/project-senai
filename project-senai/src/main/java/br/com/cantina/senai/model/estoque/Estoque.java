@@ -21,12 +21,13 @@ public class Estoque {
 
     @JoinColumn(name = "id_produto")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Produto idProduto;
+    private Produto produto;
 
+    @Column(name = "quantidade")
     private Integer quantidade;
 
     public Estoque(DTOCadastroEstoque dados) {
-        this.idProduto = idProduto;
+        this.produto = produto;
         this.quantidade = quantidade;
     }
 }
