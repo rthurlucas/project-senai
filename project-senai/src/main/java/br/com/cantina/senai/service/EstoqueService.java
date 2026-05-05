@@ -14,10 +14,11 @@ import java.util.List;
 public class EstoqueService {
     private final EstoqueRepository estoqueRepository;
 
-    @Autowired
     public EstoqueService(EstoqueRepository estoqueRepository) {
         this.estoqueRepository = estoqueRepository;
     }
+
+    //Crud Estoque
 
     @Transactional
     public DTODetalhamentoEstoque cadastrar(DTOCadastroEstoque dados) {

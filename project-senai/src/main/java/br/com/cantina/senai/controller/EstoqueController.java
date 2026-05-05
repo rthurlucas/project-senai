@@ -29,7 +29,6 @@ public class EstoqueController {
         return ResponseEntity.ok(estoque);
     }
 
-    // ✅ GET - Buscar estoque por ID
     @GetMapping("/{id}")
     public ResponseEntity<DTODetalhamentoEstoque> buscarPorId(@PathVariable Long id) {
         DTODetalhamentoEstoque estoque = estoqueService.buscarPorId(id);
