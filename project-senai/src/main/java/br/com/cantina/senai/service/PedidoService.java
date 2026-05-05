@@ -5,6 +5,7 @@ import br.com.cantina.senai.exceptions.EstoqueNotFoundException;
 import br.com.cantina.senai.model.estoque.Estoque;
 import br.com.cantina.senai.model.pedido.Pedido;
 import br.com.cantina.senai.exceptions.PedidoNotFoundException;
+import br.com.cantina.senai.model.pedido.StatusPedido;
 import br.com.cantina.senai.repositorys.EstoqueRepository;
 import br.com.cantina.senai.repositorys.PedidoRepository;
 import br.com.cantina.senai.model.produto.Produto;
@@ -21,18 +22,22 @@ import java.util.List;
 
 @Service
 public class PedidoService {
+
+    //Repositorys
+
     private final PedidoRepository pedidoRepository;
     private final ProdutoRepository produtoRepository;
     private final UsuarioRepository usuarioRepository;
     private final EstoqueRepository estoqueRepository;
 
-    @Autowired
     public PedidoService(PedidoRepository pedidoRepository, ProdutoRepository produtoRepository, UsuarioRepository usuarioRepository, EstoqueRepository estoqueRepository) {
         this.pedidoRepository = pedidoRepository;
         this.produtoRepository = produtoRepository;
         this.usuarioRepository = usuarioRepository;
         this.estoqueRepository = estoqueRepository;
     }
+
+    //Crud do pedido
 
     @Transactional
     public DTODetalhamentoPedido criarPedido(DTOCadastroPedido dados, Long idUsuario) {
@@ -41,12 +46,16 @@ public class PedidoService {
         Pedido pedido = new Pedido(dados);
         pedido.setUsuario(usuario);
         pedido.setDataPedido(LocalDateTime.now());
+        pedido.setStatusPedido(StatusPedido.CRIADO);
         pedidoRepository.save(pedido);
         return new DTODetalhamentoPedido(pedido);
     }
 
     public List<Pedido> listarPedido(Object o) {
-        return pedidoRepository.findAll();
+        return pedidoRepository.findAll()
+                .stream()
+                .filter(Pedido -> Pedido.getStatusPedido() == StatusPedido.CRIADO || Pedido.getStatusPedido() == StatusPedido.EM_PREPARACAO)
+                .toList();
     }
 
     public DTODetalhamentoPedido buscarPedido(Long idPedido) {
@@ -67,9 +76,9 @@ public class PedidoService {
 
     @Transactional
     public void excluirPedido(Long idPedido) {
-        if (!pedidoRepository.existsById(idPedido)) {
-            throw new PedidoNotFoundException("Esse Id nao existe: " + idPedido);
-        }
+        Pedido pedido = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new PedidoNotFoundException("Pedido nao encontrado ID: " + idPedido));
+        pedido.setStatusPedido(StatusPedido.CANCELADO);
         pedidoRepository.deleteById(idPedido);
     }
 
@@ -82,11 +91,40 @@ public class PedidoService {
         if (dados.quantidadePedido() > estoque.getQuantidade()) {
             throw new RuntimeException("Produto sem estoque");
         }
+        if (dados.quantidadePedido() <= 0) {
+            throw new RuntimeException("Por favor informe algum produto");
+        }
         estoque.setQuantidade(estoque.getQuantidade() - dados.quantidadePedido());
         estoqueRepository.save(estoque);
         if (estoque.getQuantidade() <= 0){
             produto.setProdutoAtivo(false);
             produtoRepository.save(produto);
         }
+    }
+
+    //Enums de Status do Pedido
+
+    @Transactional
+    public void marcarPedidoPronto(Long idPedido){
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(
+                () -> new PedidoNotFoundException("Pedido nao encontrado ID: " + idPedido));
+        pedido.setStatusPedido(StatusPedido.FINALIZADO);
+        pedidoRepository.save(pedido);
+    }
+
+    @Transactional
+    public void marcarPedidoEmPreparacao(Long idPedido){
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(
+                () -> new PedidoNotFoundException("Pedido nao encontrado ID: " + idPedido));
+        pedido.setStatusPedido(StatusPedido.EM_PREPARACAO);
+        pedidoRepository.save(pedido);
+    }
+
+    @Transactional
+    public void marcarPedidoFinalizado(Long idPedido){
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(
+                () -> new PedidoNotFoundException("Pedido nao encontrado ID: " + idPedido));
+        pedido.setStatusPedido(StatusPedido.FINALIZADO);
+        pedidoRepository.save(pedido);
     }
 }
