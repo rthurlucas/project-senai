@@ -36,7 +36,7 @@ public class PedidoService {
 
     @Transactional
     public DTODetalhamentoPedido criarPedido(DTOCadastroPedido dados, Long idUsuario) {
-        Usuario usuario = usuarioRepository.findByUsuario_id(idUsuario)
+        Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         Pedido pedido = new Pedido(dados);
         pedido.setUsuario(usuario);
@@ -45,7 +45,7 @@ public class PedidoService {
         return new DTODetalhamentoPedido(pedido);
     }
 
-    public List<Pedido> listarPedido(Long idPedido) {
+    public List<Pedido> listarPedido(Object o) {
         return pedidoRepository.findAll();
     }
 
@@ -73,17 +73,18 @@ public class PedidoService {
         pedidoRepository.deleteById(idPedido);
     }
 
+    @Transactional
     public void pedidoFeito(DTOPedido dados, Long idProduto) {
         Produto produto = produtoRepository.findById(idProduto)
                 .orElseThrow(() -> new ProdutoNotFoundException("Produto nao encontrado: " + idProduto));
-        Estoque estoque = estoqueRepository.findByProduto_Idproduto(idProduto)
+        Estoque estoque = estoqueRepository.findByProduto_IdProduto(idProduto)
                 .orElseThrow(() -> new EstoqueNotFoundException("Estoque nao encontrado para o produto ID: " + idProduto));
         if (dados.quantidadePedido() > estoque.getQuantidade()) {
             throw new RuntimeException("Produto sem estoque");
         }
         estoque.setQuantidade(estoque.getQuantidade() - dados.quantidadePedido());
         estoqueRepository.save(estoque);
-        if (estoque.getQuantidade() == 0){
+        if (estoque.getQuantidade() <= 0){
             produto.setProdutoAtivo(false);
             produtoRepository.save(produto);
         }
