@@ -14,7 +14,6 @@ import br.com.cantina.senai.repositorys.ProdutoRepository;
 import br.com.cantina.senai.model.usuario.Usuario;
 import br.com.cantina.senai.repositorys.UsuarioRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -105,7 +104,7 @@ public class PedidoService {
     //Enums de Status do Pedido
 
     @Transactional
-    public void marcarPedidoPronto(Long idPedido){
+    public void marcarPedidoFinalizado(Long idPedido){
         Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(
                 () -> new PedidoNotFoundException("Pedido nao encontrado ID: " + idPedido));
         pedido.setStatusPedido(StatusPedido.FINALIZADO);
@@ -117,14 +116,6 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(
                 () -> new PedidoNotFoundException("Pedido nao encontrado ID: " + idPedido));
         pedido.setStatusPedido(StatusPedido.EM_PREPARACAO);
-        pedidoRepository.save(pedido);
-    }
-
-    @Transactional
-    public void marcarPedidoFinalizado(Long idPedido){
-        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(
-                () -> new PedidoNotFoundException("Pedido nao encontrado ID: " + idPedido));
-        pedido.setStatusPedido(StatusPedido.FINALIZADO);
         pedidoRepository.save(pedido);
     }
 }

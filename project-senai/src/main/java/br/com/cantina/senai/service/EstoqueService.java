@@ -5,7 +5,6 @@ import br.com.cantina.senai.model.estoque.Estoque;
 import br.com.cantina.senai.exceptions.EstoqueNotFoundException;
 import br.com.cantina.senai.repositorys.EstoqueRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
