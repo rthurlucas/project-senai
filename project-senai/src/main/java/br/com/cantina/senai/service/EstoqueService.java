@@ -43,7 +43,9 @@ public class EstoqueService {
     public DTODetalhamentoEstoque atualizar(Long id, DTOAtualizarEstoque dados) {
         Estoque estoque = estoqueRepository.findById(id)
                 .orElseThrow(() -> new EstoqueNotFoundException("Estoque não encontrado ID: " + id));
-        estoque.setQuantidade(dados.quantidade());
+        if (dados.quantidade() != null){
+            estoque.setQuantidade(dados.quantidade());
+        }
         return new DTODetalhamentoEstoque(estoque);
     }
     @Transactional
