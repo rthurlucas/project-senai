@@ -1,3 +1,18 @@
+:root {
+    /* Cores Principais */
+    --vermelho: #e63946;
+    --vermelho-dark: #c12a36;
+    --branco: #ffffff;
+
+    /* Tons de Cinza e Bordas */
+    --cinza-claro: #f8f9fa;
+    --cinza-borda: #eeeeee;
+
+    /* Texto */
+    --texto: #1a1a1a;
+    --texto-muted: #717171;
+}
+
 /* ── HERO ── */
 .hero {
     background: var(--branco);

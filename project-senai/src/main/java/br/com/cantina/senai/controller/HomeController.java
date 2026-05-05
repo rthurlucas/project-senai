@@ -23,7 +23,7 @@ public class HomeController {
 
     @GetMapping
     public String home(Model model) {
-        model.addAttribute("usuarios", usuarioService.listarUsuarios(1L).get(0));
+        model.addAttribute("usuarios", usuarioService.listarUsuarios(null));
         model.addAttribute("produtos", produtoService.listarProdutos());
         return "home";
     }
