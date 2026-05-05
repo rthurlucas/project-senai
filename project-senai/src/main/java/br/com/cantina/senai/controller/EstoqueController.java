@@ -22,7 +22,6 @@ public class EstoqueController {
         this.estoqueService = estoqueService;
     }
 
-    // ✅ GET - Listar todo o estoque
     @GetMapping
     public ResponseEntity<List<DTOListagemEstoque>> listarTodos() {
         List<DTOListagemEstoque> estoque = estoqueService.listarTodos();
@@ -35,14 +34,12 @@ public class EstoqueController {
         return ResponseEntity.ok(estoque);
     }
 
-    // ✅ POST - Criar novo registro de estoque
     @PostMapping
     public ResponseEntity<DTODetalhamentoEstoque> criar(@RequestBody DTOCadastroEstoque dados) {
         DTODetalhamentoEstoque estoqueNovo = estoqueService.cadastrar(dados);
         return ResponseEntity.status(201).body(estoqueNovo);
     }
 
-    // ✅ PUT - Atualizar quantidade de estoque
     @PutMapping("/{id}")
     public ResponseEntity<DTODetalhamentoEstoque> atualizar(
             @PathVariable Long id,
@@ -52,7 +49,6 @@ public class EstoqueController {
         return ResponseEntity.ok(estoqueAtualizado);
     }
 
-    // ✅ DELETE - Deletar registro de estoque
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         estoqueService.excluir(id);
