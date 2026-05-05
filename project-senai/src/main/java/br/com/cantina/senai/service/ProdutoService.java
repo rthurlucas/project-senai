@@ -4,18 +4,15 @@ import br.com.cantina.senai.dto.DTOAtualizarProduto;
 import br.com.cantina.senai.dto.DTOCadastroProduto;
 import br.com.cantina.senai.dto.DTODetalhamentoProduto;
 import br.com.cantina.senai.dto.DTOListagemProduto;
-import br.com.cantina.senai.model.estoque.Estoque;
 import br.com.cantina.senai.model.produto.Produto;
 import br.com.cantina.senai.exceptions.ProdutoNameException;
 import br.com.cantina.senai.exceptions.ProdutoNotFoundException;
-import br.com.cantina.senai.repositorys.PedidoRepository;
 import br.com.cantina.senai.repositorys.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -37,8 +34,9 @@ public class ProdutoService {
     public List<DTOListagemProduto> listarProdutos() {
         return produtoRepository.findAll()
                 .stream()
+                .filter(Produto -> Produto.isProdutoAtivo())
                 .map(DTOListagemProduto::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public DTODetalhamentoProduto buscarProdutoPorId(Long idProduto){
@@ -52,19 +50,24 @@ public class ProdutoService {
         return new DTODetalhamentoProduto(produto);
     }
 
+    @Transactional
     public DTODetalhamentoProduto atualizarNomeProduto(DTOAtualizarProduto dados, Long idProduto){
         Produto produto = produtoRepository.findById(idProduto)
                 .orElseThrow(() -> new ProdutoNotFoundException("Produto nao encontrado pelo ID: " + idProduto));
+        if (dados.nomeProduto() != null){
+            produto.setNomeProduto(dados.nomeProduto());
+        }
         if (dados.descricaoProduto() != null){
             produto.setDescricaoProduto(dados.descricaoProduto());
         }
        produto.setNomeProduto(dados.nomeProduto());
-        return new  DTODetalhamentoProduto(produto);
+        produtoRepository.save(produto);
+        return new DTODetalhamentoProduto(produto);
     }
 
     @Transactional
     public void excluirProduto(Long id){
-        if (produtoRepository.existsById(id)){
+        if (!produtoRepository.existsById(id)){
             throw new ProdutoNotFoundException("Produto nao encontrado para excluir ID: " + id);
         }
         produtoRepository.deleteById(id);
