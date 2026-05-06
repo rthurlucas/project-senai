@@ -114,6 +114,15 @@ function renderGrid() {
         const qtd  = carrinho[p.idProduto] || 0;
         const card = document.createElement('div');
         card.className = 'food-card' + (p.disponivel ? '' : ' esgotado');
+
+        const controles = qtd > 0
+            ? `<div class="card-controles">
+                   <button class="btn-ctrl btn-menos" onclick="removeItem(${p.id})">−</button>
+                   <span class="card-qtd">${qtd}</span>
+                   <button class="btn-ctrl btn-mais" onclick="addItem(${p.id})">+</button>
+               </div>`
+            : `<button class="btn-add" onclick="addItem(${p.id})" ${!p.disponivel ? 'disabled' : ''}>+</button>`;
+
         card.innerHTML = `
             <div class="card-img ${p.bg}">
                 <span style="font-size:38px">${p.emoji}</span>
@@ -126,11 +135,7 @@ function renderGrid() {
                 <p class="card-desc">${p.descricaoProduto}</p>
                 <div class="card-footer">
                     <span class="card-preco">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
-                    <button class="btn-add${qtd > 0 ? ' tem-qtd' : ''}"
-                            onclick="addItem(${p.id})"
-                            ${!p.disponivel ? 'disabled' : ''}>
-                        ${qtd > 0 ? qtd + 'x' : '+'}
-                    </button>
+                    ${controles}
                 </div>
             </div>`;
         grid.appendChild(card);
@@ -140,6 +145,15 @@ function renderGrid() {
 /* ── CARRINHO ── */
 function addItem(id) {
     carrinho[id] = (carrinho[id] || 0) + 1;
+    salvarCarrinho();
+    atualizarCartBar();
+    renderGrid();
+}
+
+function removeItem(id) {
+    if (!carrinho[id]) return;
+    carrinho[id]--;
+    if (carrinho[id] === 0) delete carrinho[id];
     salvarCarrinho();
     atualizarCartBar();
     renderGrid();

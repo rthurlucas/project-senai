@@ -1,51 +1,51 @@
-:root {
-    /* Cores Principais */
-    --vermelho: #e63946;
-    --vermelho-dark: #c12a36;
-    --branco: #ffffff;
-
-    /* Tons de Cinza e Bordas */
-    --cinza-claro: #f8f9fa;
-    --cinza-borda: #eeeeee;
-
-    /* Texto */
-    --texto: #1a1a1a;
-    --texto-muted: #717171;
+body {
+    background: #f5f5f5;
 }
 
 /* ── HERO ── */
 .hero {
-    background: var(--branco);
-    border-bottom: 1px solid var(--cinza-borda);
+    background: #ffffff;
+    border-bottom: 1px solid #e8e8e8;
     padding: 1.8rem 2rem 1.5rem;
+    position: relative;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 6px; height: 100%;
+    background: #E3000F;
 }
 
 .hero-eyebrow {
     font-size: 11px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--vermelho);
+    color: #E3000F;
     font-weight: 500;
     margin-bottom: 4px;
+    padding-left: 6px;
 }
 
 .hero-title {
-    font-family: 'Syne', sans-serif;
     font-size: 24px;
-    font-weight: 800;
-    color: var(--texto);
+    font-weight: 700;
+    color: #1a1a1a;
     margin-bottom: 2px;
+    padding-left: 6px;
 }
 
 .hero-sub {
-    color: var(--texto-muted);
+    color: #888;
     font-size: 13px;
+    padding-left: 6px;
 }
 
 /* ── FILTROS ── */
 .filtros-wrap {
-    background: var(--branco);
-    border-bottom: 1px solid var(--cinza-borda);
+    background: #ffffff;
+    border-bottom: 1px solid #e8e8e8;
     padding: 0.9rem 2rem;
     display: flex;
     align-items: center;
@@ -56,34 +56,40 @@
 .search-input {
     flex: 1;
     min-width: 160px;
-    background: var(--cinza-claro);
-    border: 1px solid var(--cinza-borda);
+    background: #fafafa;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 8px 14px;
+    padding: 0 14px;
+    height: 38px;
     font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    color: var(--texto);
+    font-family: sans-serif;
+    color: #1a1a1a;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-.search-input:focus { border-color: var(--vermelho); }
+.search-input:focus {
+    border-color: #E3000F;
+    box-shadow: 0 0 0 3px rgba(227,0,15,0.1);
+    background: #fff;
+}
 
 .filtro-btn {
-    background: var(--cinza-claro);
-    border: 1px solid var(--cinza-borda);
-    color: var(--texto-muted);
-    border-radius: 20px;
+    background: #f5f5f5;
+    border: 1.5px solid #e8e8e8;
+    color: #888;
+    border-radius: 8px;
     padding: 6px 16px;
+    height: 38px;
     font-size: 12px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
     font-weight: 500;
-    transition: all 0.15s;
+    cursor: pointer;
+    font-family: sans-serif;
+    transition: border-color 0.15s, background 0.15s;
 }
 
-.filtro-btn:hover  { border-color: var(--vermelho); color: var(--vermelho); }
-.filtro-btn.active { background: var(--vermelho); border-color: var(--vermelho); color: var(--branco); }
+.filtro-btn:hover  { border-color: #ccc; background: #fff; }
+.filtro-btn.active { border-color: #E3000F; background: #fff5f5; color: #E3000F; }
 
 /* ── MAIN ── */
 .main {
@@ -93,11 +99,10 @@
 }
 
 .section-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--texto-muted);
-    letter-spacing: 1px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #888;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 1rem;
     display: flex;
@@ -109,10 +114,10 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: var(--cinza-borda);
+    background: #e8e8e8;
 }
 
-/* ── GRID DE CARDS ── */
+/* ── GRID ── */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
@@ -121,20 +126,20 @@
 }
 
 .food-card {
-    background: var(--branco);
-    border-radius: 14px;
+    background: #ffffff;
+    border-radius: 12px;
     overflow: hidden;
-    border: 1px solid var(--cinza-borda);
-    transition: transform 0.15s, box-shadow 0.15s;
+    border: 1.5px solid #e8e8e8;
+    transition: border-color 0.15s, box-shadow 0.15s;
     cursor: pointer;
 }
 
 .food-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    border-color: #ccc;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
 }
 
-.food-card.esgotado { opacity: 0.55; pointer-events: none; }
+.food-card.esgotado { opacity: 0.5; pointer-events: none; }
 
 .card-img {
     width: 100%;
@@ -142,7 +147,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 40px;
+    font-size: 38px;
     position: relative;
 }
 
@@ -170,17 +175,16 @@
 .card-body { padding: 10px 12px 12px; }
 
 .card-nome {
-    font-family: 'Syne', sans-serif;
     font-size: 13px;
-    font-weight: 700;
-    color: var(--texto);
+    font-weight: 500;
+    color: #1a1a1a;
     margin-bottom: 3px;
     line-height: 1.3;
 }
 
 .card-desc {
     font-size: 11px;
-    color: var(--texto-muted);
+    color: #888;
     margin-bottom: 10px;
     line-height: 1.4;
 }
@@ -192,15 +196,14 @@
 }
 
 .card-preco {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
     font-size: 15px;
-    color: var(--vermelho);
+    font-weight: 700;
+    color: #E3000F;
 }
 
 .btn-add {
-    background: var(--vermelho);
-    color: var(--branco);
+    background: #E3000F;
+    color: #ffffff;
     border: none;
     border-radius: 8px;
     width: 30px;
@@ -211,14 +214,13 @@
     align-items: center;
     justify-content: center;
     line-height: 1;
-    font-family: 'Syne', sans-serif;
     font-weight: 700;
     transition: background 0.15s, transform 0.1s;
 }
 
-.btn-add:hover    { background: var(--vermelho-dark); }
+.btn-add:hover    { background: #c0000d; }
 .btn-add:active   { transform: scale(0.93); }
-.btn-add.tem-qtd  { background: var(--texto); font-size: 13px; }
+.btn-add.tem-qtd  { background: #1a1a1a; font-size: 13px; }
 
 /* ── CART BAR ── */
 .cart-bar {
@@ -226,16 +228,15 @@
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--texto);
-    color: var(--branco);
-    border-radius: 40px;
+    background: #1a1a1a;
+    color: #ffffff;
+    border-radius: 8px;
     padding: 13px 20px 13px 16px;
     display: flex;
     align-items: center;
     gap: 16px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 600;
     font-size: 13px;
+    font-weight: 500;
     box-shadow: 0 6px 28px rgba(0,0,0,0.22);
     min-width: 260px;
     justify-content: space-between;
@@ -252,7 +253,7 @@
 .cart-info  { display: flex; align-items: center; gap: 10px; }
 
 .cart-badge {
-    background: var(--vermelho);
+    background: #E3000F;
     border-radius: 50%;
     width: 24px;
     height: 24px;
@@ -260,36 +261,67 @@
     align-items: center;
     justify-content: center;
     font-size: 12px;
-    font-family: 'Syne', sans-serif;
     font-weight: 700;
 }
 
 .cart-total {
     font-size: 14px;
     color: rgba(255,255,255,0.8);
-    font-family: 'DM Sans', sans-serif;
 }
 
 .btn-finalizar {
-    background: var(--vermelho);
-    color: var(--branco);
+    background: #E3000F;
+    color: #ffffff;
     border: none;
-    border-radius: 20px;
+    border-radius: 8px;
     padding: 8px 20px;
     font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
     transition: background 0.15s;
     text-decoration: none;
 }
 
-.btn-finalizar:hover { background: var(--vermelho-dark); }
+.btn-finalizar:hover { background: #c0000d; }
 
-/* ── VAZIO ── */
 .vazio {
     text-align: center;
     padding: 3rem 0;
-    color: var(--texto-muted);
+    color: #888;
     font-size: 14px;
 }
+/* ── CONTROLES DE QUANTIDADE NO CARD ── */
+.card-controles {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.card-qtd {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    min-width: 18px;
+    text-align: center;
+}
+
+.btn-ctrl {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1.5px solid #e8e8e8;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: all 0.12s;
+}
+
+.btn-mais { background: #E3000F; border-color: #E3000F; color: #fff; }
+.btn-mais:hover { background: #c0000d; }
+.btn-menos:hover { background: #fff5f5; border-color: #E3000F; color: #E3000F; }
