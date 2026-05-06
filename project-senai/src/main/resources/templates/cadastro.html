@@ -2,14 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Cantina SENAI</title>
+    <title>Cadastro – Cantina SENAI</title>
     <link rel="stylesheet" th:href="@{/login.css}">
     <link rel="stylesheet" href="/project-senai-dev/project-senai/src/main/resources/static/css/login.css">
 </head>
 <body>
 
 <div class="screen">
-    <div class="card">
+    <div class="card" style="max-width: 440px;">
 
         <div class="logo-area">
             <div class="senai-badge">
@@ -20,10 +20,10 @@
                     <div class="line2">Cantina SENAI</div>
                 </div>
             </div>
-            <p>Faça login para continuar</p>
+            <p>Crie sua conta para continuar</p>
         </div>
 
-        <p class="profile-label">Entrar como</p>
+        <p class="profile-label">Tipo de conta</p>
         <div class="profile-grid">
 
             <button type="button" class="profile-btn selected"
@@ -61,31 +61,46 @@
 
         </div>
 
-        <form th:action="@{/login}" method="post">
-            <input type="hidden" id="perfil" name="perfil" value="USUARIO" />
+        <form th:action="@{/cadastro}" method="post">
+            <input type="hidden" id="perfil" name="tipoUsuario" value="USUARIO" />
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label>Nome completo</label>
+                    <input type="text" name="nome" placeholder="Seu nome completo" required />
+                </div>
+                <div class="form-group">
+                    <label>CPF</label>
+                    <input type="text" name="cpf" placeholder="000.000.000-00" required />
+                </div>
+            </div>
 
             <div class="form-group">
-                <label>E-mail ou matrícula</label>
-                <input type="text" name="email" placeholder="seu@email.com" required />
+                <label>Telefone</label>
+                <input type="text" name="telefone" placeholder="(11) 99999-9999" />
             </div>
+
             <div class="form-group">
                 <label>Senha</label>
                 <input type="password" name="senha" placeholder="••••••••" required />
             </div>
 
+            <div class="form-group">
+                <label>Confirmar senha</label>
+                <input type="password" name="confirmarSenha" id="confirmarSenha" placeholder="••••••••" required />
+            </div>
+
             <p th:if="${erro != null}" class="erro-msg" th:text="${erro}"></p>
 
-            <button type="submit" class="btn-entrar">Entrar</button>
+            <button type="submit" class="btn-entrar">Criar conta</button>
         </form>
-
-        <p class="forgot"><a href="#">Esqueci minha senha</a></p>
 
         <div class="divider">
             <span>ou</span>
         </div>
 
-        <a class="btn-cadastro" th:href="@{/cadastro}" href="/project-senai-dev/project-senai/src/main/resources/templates/cadastro.html">
-            Criar uma conta
+        <a class="btn-cadastro" th:href="@{/login}" href="/project-senai-dev/project-senai/src/main/resources/templates/login.html">
+            Já tenho uma conta
         </a>
 
         <div class="footer-bar"></div>

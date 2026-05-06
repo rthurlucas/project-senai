@@ -155,3 +155,55 @@ body {
     background: #E3000F;
     border-radius: 0 0 12px 12px;
 }
+/* ── ADICIONAR NO FINAL DO login.css ── */
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0 12px;
+    color: #ccc;
+    font-size: 12px;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e8e8e8;
+}
+
+.btn-cadastro {
+    display: block;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: #fff;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 8px;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    margin-bottom: 1rem;
+}
+
+.btn-cadastro:hover {
+    border-color: #E3000F;
+    color: #E3000F;
+    background: #fff5f5;
+}
+
+/* ── FORM DE 2 COLUNAS (cadastro) ── */
+.form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+@media (max-width: 400px) {
+    .form-row-2 { grid-template-columns: 1fr; }
+}
