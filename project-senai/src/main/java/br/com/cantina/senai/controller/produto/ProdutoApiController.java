@@ -20,7 +20,7 @@ public class ProdutoApiController {
         this.produtoService = produtoService;
     }
 
-    @GetMapping // Removido o "/produtos" extra para bater com o JS
+    @GetMapping 
     public List<DTOListagemProduto> listarProdutos() {
         return produtoService.listarProdutos();
     }
