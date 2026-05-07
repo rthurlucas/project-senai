@@ -1,4 +1,4 @@
-package br.com.cantina.senai.controller;
+package br.com.cantina.senai.controller.estoque;
 
 import br.com.cantina.senai.dto.DTOCadastroEstoque;
 import br.com.cantina.senai.dto.DTOAtualizarEstoque;

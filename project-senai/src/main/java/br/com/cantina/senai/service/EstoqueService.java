@@ -1,9 +1,12 @@
 package br.com.cantina.senai.service;
 
 import br.com.cantina.senai.dto.*;
+import br.com.cantina.senai.exceptions.ProdutoNotFoundException;
 import br.com.cantina.senai.model.estoque.Estoque;
 import br.com.cantina.senai.exceptions.EstoqueNotFoundException;
+import br.com.cantina.senai.model.produto.Produto;
 import br.com.cantina.senai.repositorys.EstoqueRepository;
+import br.com.cantina.senai.repositorys.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +15,22 @@ import java.util.List;
 @Service
 public class EstoqueService {
     private final EstoqueRepository estoqueRepository;
+    private final ProdutoRepository produtoRepository;
 
-    public EstoqueService(EstoqueRepository estoqueRepository) {
+    public EstoqueService(EstoqueRepository estoqueRepository, ProdutoRepository produtoRepository) {
         this.estoqueRepository = estoqueRepository;
+        this.produtoRepository = produtoRepository;
     }
 
     //Crud Estoque
 
     @Transactional
     public DTODetalhamentoEstoque cadastrar(DTOCadastroEstoque dados) {
-        Estoque estoque = new Estoque(dados);
+        Produto produto = produtoRepository.findById(dados.idProduto())
+                .orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado"));
+        Estoque estoque = new Estoque();
+        estoque.setProduto(produto);
+        estoque.setQuantidade(dados.quantidade());
         estoqueRepository.save(estoque);
         return new DTODetalhamentoEstoque(estoque);
     }
@@ -48,6 +57,7 @@ public class EstoqueService {
         }
         return new DTODetalhamentoEstoque(estoque);
     }
+
     @Transactional
     public void excluir(Long id) {
         if (!estoqueRepository.existsById(id)) {
