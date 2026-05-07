@@ -1,8 +1,8 @@
 package br.com.cantina.senai.dto;
 
 public record DTOCadastroPedido(
-        Long idUsuario,
-        Long idProduto,
+        String nome,
+        String nomeProduto,
         Integer quantidade
 ){
 }

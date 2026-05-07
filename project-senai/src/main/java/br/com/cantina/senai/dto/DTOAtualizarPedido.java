@@ -8,7 +8,7 @@ public record DTOAtualizarPedido(
         @NotNull
         Long idProduto,
         @NotNull
-        @Min(0)
+        @Min(1)
         Integer quantidade
 ) {
 }

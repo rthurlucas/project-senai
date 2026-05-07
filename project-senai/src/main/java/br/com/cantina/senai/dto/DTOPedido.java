@@ -1,18 +1,11 @@
 package br.com.cantina.senai.dto;
 
-import br.com.cantina.senai.model.pedido.Pedido;
-import br.com.cantina.senai.model.pedido.StatusPedido;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 public record DTOPedido(
-        Long idProduto,
-        Integer quantidadePedido,
-        StatusPedido statusPedido
+        @NotNull
+        @Min(1)
+        Integer quantidadePedido
 ) {
-    public DTOPedido(Pedido pedido){
-        this(
-                pedido.getIdPedido(),
-                pedido.getQuantidadePedido(),
-                pedido.getStatusPedido()
-        );
-    }
 }

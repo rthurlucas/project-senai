@@ -18,7 +18,7 @@ public class DbConfig {
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         ds.setJdbcUrl("jdbc:mysql://localhost:3306/cantinasenai");
         ds.setUsername("root");
-        ds.setPassword("senai@126");
+        ds.setPassword("27032008");
 
         return ds;
     }

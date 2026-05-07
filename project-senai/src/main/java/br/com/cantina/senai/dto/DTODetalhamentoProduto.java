@@ -5,13 +5,15 @@ import br.com.cantina.senai.model.produto.Produto;
 public record DTODetalhamentoProduto(
         Long idProduto,
         String descricaoProduto,
-        String nomeProduto
+        String nomeProduto,
+        boolean ativo
 ) {
     public DTODetalhamentoProduto(Produto produto){
         this(
                 produto.getIdProduto(),
                 produto.getDescricaoProduto(),
-                produto.getNomeProduto()
+                produto.getNomeProduto(),
+                produto.isProdutoAtivo()
         );
     }
 }
