@@ -41,6 +41,6 @@ public class FuncionarioApiController {
 
     @GetMapping("/estoque")
     public List<DTOListagemEstoque> listarEstoque() {
-        return estoqueService.listarTodos(); // Certifique-se que o service tem esse método
+        return estoqueService.listarTodos();
     }
 }
