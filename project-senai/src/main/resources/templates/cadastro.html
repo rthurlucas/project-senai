@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadastro – Cantina SENAI</title>
-    <link rel="stylesheet" th:href="@{/login.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
     <link rel="stylesheet" href="/project-senai-dev/project-senai/src/main/resources/static/css/login.css">
 </head>
 <body>
@@ -60,8 +60,7 @@
             </button>
 
         </div>
-
-        <form th:action="@{/cadastro}" method="post">
+        <form th:action="@{/home}" method="post">
             <input type="hidden" id="perfil" name="tipoUsuario" value="USUARIO" />
 
             <div class="form-row-2">
@@ -81,25 +80,21 @@
             </div>
 
             <div class="form-group">
-                <label>Senha</label>
-                <input type="password" name="senha" placeholder="••••••••" required />
-            </div>
-
-            <div class="form-group">
-                <label>Confirmar senha</label>
-                <input type="password" name="confirmarSenha" id="confirmarSenha" placeholder="••••••••" required />
+                <label>E-mail</label>
+                <input type="email" name="email" placeholder="exemplo@email.com" required />
             </div>
 
             <p th:if="${erro != null}" class="erro-msg" th:text="${erro}"></p>
 
-            <button type="submit" class="btn-entrar">Criar conta</button>
-        </form>
+            <div class="form-actions">
+                <button type="submit" class="btn-entrar">Criar Conta e Logar</button>
+            </div>
 
         <div class="divider">
             <span>ou</span>
         </div>
 
-        <a class="btn-cadastro" th:href="@{/login}" href="/project-senai-dev/project-senai/src/main/resources/templates/login.html">
+        <a class="btn-cadastro" th:href="@{/home}" href="/project-senai-dev/project-senai/src/main/resources/templates/login.html">
             Já tenho uma conta
         </a>
 
