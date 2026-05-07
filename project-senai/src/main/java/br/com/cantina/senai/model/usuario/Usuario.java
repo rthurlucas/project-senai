@@ -29,11 +29,10 @@ public class Usuario {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo")
+    @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
 
   public Usuario(DTOCadastroUsuario dados){
-    this.idUsuario = idUsuario;
     this.nome = dados.nome();
     this.cpf = dados.cpf();
     this.telefone = dados.telefone();
