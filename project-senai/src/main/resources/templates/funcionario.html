@@ -20,12 +20,8 @@
         <span class="nav-titulo">Cantina SENAI</span>
         <span class="nav-badge">Painel do Funcionário</span>
     </div>
-    <div class="nav-right">
-        <div class="nav-user">
-            <div class="nav-avatar"
-                 th:text="${#strings.toUpperCase(#strings.substring(usuario.nome, 0, 2))}">FU</div>
-            <span th:text="${usuario.nome}">Funcionário</span>
-        </div>
+    <div class="nav-avatar">FU</div>
+    <span>Funcionário</span>
         <a class="btn-sair" th:href="@{/logout}">Sair</a>
     </div>
 </nav>
