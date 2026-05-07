@@ -30,7 +30,7 @@ public class UsuarioService {
         return new DTODetalhamentoUsuario(usuario);
     }
 
-    public List<DTOListagemUsuario> listarUsuarios(Object o){
+    public List<DTOListagemUsuario> listarUsuarios(){
         return usuarioRepository.findAll().stream()
                 .map(DTOListagemUsuario::new)
                 .toList();
