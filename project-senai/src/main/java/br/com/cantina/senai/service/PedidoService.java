@@ -6,6 +6,7 @@ import br.com.cantina.senai.model.estoque.Estoque;
 import br.com.cantina.senai.model.pedido.Pedido;
 import br.com.cantina.senai.exceptions.PedidoNotFoundException;
 import br.com.cantina.senai.model.pedido.StatusPedido;
+import br.com.cantina.senai.model.quantidadeProduto.QuantidadeProduto;
 import br.com.cantina.senai.repositorys.EstoqueRepository;
 import br.com.cantina.senai.repositorys.PedidoRepository;
 import br.com.cantina.senai.model.produto.Produto;
@@ -50,7 +51,7 @@ public class PedidoService {
         return new DTODetalhamentoPedido(pedido);
     }
 
-    public List<Pedido> listarPedido(Object o) {
+    public List<Pedido> listarPedido() {
         return pedidoRepository.findAll()
                 .stream()
                 .filter(Pedido -> Pedido.getStatusPedido() == StatusPedido.CRIADO || Pedido.getStatusPedido() == StatusPedido.EM_PREPARACAO)
@@ -67,8 +68,11 @@ public class PedidoService {
     public DTODetalhamentoPedido atualizarPedido(Long idPedido, DTOAtualizarPedido dados, Long idProduto) {
         Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(() -> new PedidoNotFoundException("Pedido nao encontrado ID: " + idPedido));
         Produto produto = produtoRepository.findById(idProduto).orElseThrow(() -> new ProdutoNotFoundException("Produto nao encontrado: " + idProduto));
-        pedido.setQuantidadePedido(dados.quantidade());
-        pedido.setProduto(produto);
+        QuantidadeProduto item = pedido.getItens().stream()
+                .filter(i -> i.getProduto().getIdProduto().equals(idProduto))
+                .findFirst()
+                .orElseThrow(() -> new ProdutoNotFoundException("Produto nao encontrado no pedido"));
+        item.setQuantidade(dados.quantidade());
         pedidoRepository.save(pedido);
         return new DTODetalhamentoPedido(pedido);
     }
@@ -82,7 +86,10 @@ public class PedidoService {
     }
 
     @Transactional
-    public void pedidoFeito(DTOPedido dados, Long idProduto) {
+    public void pedidoFeito(DTOPedido dados, Long idProduto, Long idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new PedidoNotFoundException("Pedido nao encontrado"));
+
         Produto produto = produtoRepository.findById(idProduto)
                 .orElseThrow(() -> new ProdutoNotFoundException("Produto nao encontrado: " + idProduto));
         Estoque estoque = estoqueRepository.findByProduto_IdProduto(idProduto)
@@ -93,6 +100,13 @@ public class PedidoService {
         if (dados.quantidadePedido() <= 0) {
             throw new RuntimeException("Por favor informe algum produto");
         }
+
+        QuantidadeProduto item = new QuantidadeProduto();
+        item.setPedido(pedido);
+        item.setProduto(produto);
+        item.setQuantidade(dados.quantidadePedido());
+        pedido.getItens().add(item);
+
         estoque.setQuantidade(estoque.getQuantidade() - dados.quantidadePedido());
         estoqueRepository.save(estoque);
         if (estoque.getQuantidade() <= 0){
@@ -101,7 +115,7 @@ public class PedidoService {
         }
     }
 
-    //Enums de Status do Pedido
+    //Marcacao de Enum para Status do Pedido
 
     @Transactional
     public void marcarPedidoFinalizado(Long idPedido){
