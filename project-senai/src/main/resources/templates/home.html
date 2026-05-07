@@ -3,17 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Cardápio – Cantina SENAI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- Spring Boot -->
     <link rel="stylesheet" th:href="@{/css/global.css}">
     <link rel="stylesheet" th:href="@{/css/home.css}">
-
-
 </head>
 <body>
-
 
 <nav class="navbar">
     <div class="nav-logo">
@@ -23,21 +16,23 @@
     </div>
     <div class="nav-right">
         <div class="nav-user">
-            <div class="nav-avatar"
-                 th:text="${#strings.toUpperCase(#strings.substring(usuario.nome, 0, 2))}">BA</div>
-            <span th:text="${usuario.nome}">Usuário</span>
+            <div class="nav-avatar">US</div>
+            <span>Usuário</span>
+        </div>
+
+        <div class="user-info">
+            <span id="nomeUsuarioTopo">Visitante</span>
+            <div class="user-badge">US</div>
         </div>
         <a class="btn-sair" th:href="@{/logout}">Sair</a>
     </div>
 </nav>
-
 
 <div class="hero">
     <p class="hero-eyebrow">Cardápio do dia</p>
     <h1 class="hero-title">O que vai querer hoje?</h1>
     <p class="hero-sub" id="dataHoje"></p>
 </div>
-
 
 <div class="filtros-wrap">
     <input class="search-input" type="text" placeholder="Buscar item..."
@@ -48,14 +43,17 @@
     <button class="filtro-btn" onclick="setCategoria('sobremesa', this)">Sobremesa</button>
 </div>
 
-
 <div class="main">
     <div class="section-label">Itens disponíveis</div>
-    <div class="card-grid" id="grid"></div>
+    <div class="card-grid" id="grid">
+        <div class="card-item" th:each="produto : ${produtos}">
+            <div class="card-nome" th:text="${produto.nomeProduto}">Nome</div>
+            <div class="card-desc" th:text="${produto.descricaoProduto}">Descrição</div>
+        </div>
+    </div>
     <p class="vazio" id="vazio" style="display:none;">Nenhum item encontrado.</p>
 </div>
 
-<!-- CART BAR -->
 <div class="cart-bar hidden" id="cartBar">
     <div class="cart-info">
         <div class="cart-badge" id="cartQtd">0</div>
