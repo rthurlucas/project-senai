@@ -1,21 +1,5 @@
 let carrinho = JSON.parse(sessionStorage.getItem('carrinho') || '{}');
-let produtos  = [];
 let produtosMapeados = {};
-let idPedidoCriado = null;
-
-/* ── MAPEAMENTO ESTÁTICO DE DADOS UI ── */
-const dadosUI = {
-    1: { emoji: '🍔', cat: 'lanche', bg: 'bg-rosa' },
-    2: { emoji: '🍗', cat: 'lanche', bg: 'bg-amarelo' },
-    3: { emoji: '🥪', cat: 'lanche', bg: 'bg-amarelo' },
-    4: { emoji: '🥐', cat: 'lanche', bg: 'bg-laranja' },
-    5: { emoji: '🍊', cat: 'bebida', bg: 'bg-laranja' },
-    6: { emoji: '🥤', cat: 'bebida', bg: 'bg-azul' },
-    7: { emoji: '🥛', cat: 'bebida', bg: 'bg-roxo' },
-    8: { emoji: '💧', cat: 'bebida', bg: 'bg-azul' },
-    9: { emoji: '🍮', cat: 'sobremesa', bg: 'bg-amarelo' },
-    10: { emoji: '🍰', cat: 'sobremesa', bg: 'bg-rosa' }
-};
 
 /* ── CARREGAR PRODUTOS DO BACKEND ── */
 function carregarProdutos() {
@@ -25,45 +9,21 @@ function carregarProdutos() {
             return response.json();
         })
         .then(data => {
-            produtos = data;
-            // Mesclar produtos com dados UI
             produtosMapeados = {};
-            produtos.forEach(p => {
-                const ui = dadosUI[p.idProduto] || { emoji: '🍔', cat: 'lanche', bg: 'bg-rosa' };
-                produtosMapeados[p.idProduto] = { ...p, ...ui, disponivel: true };
+            data.forEach(p => {
+                // Mapeia usando idProduto ou id (verifique seu DTO)
+                produtosMapeados[p.idProduto || p.id] = p;
             });
             render();
         })
         .catch(error => {
-            console.error('Erro ao carregar produtos:', error);
-            // Tentar usar dados locais como fallback
+            console.error('Erro na API, usando dados locais:', error);
             usarDadosLocais();
         });
 }
 
-/* ── DADOS DE FALLBACK ── */
-function usarDadosLocais() {
-    const produtosLocais = [
-        { idProduto:1,  nomeProduto:'X-Burguer',       descricaoProduto:'Pão, carne, queijo e alface',      preco:6.50, emoji:'🍔', bg:'bg-rosa',    cat:'lanche',    disponivel:true  },
-        { idProduto:2,  nomeProduto:'Coxinha',          descricaoProduto:'Recheio de frango cremoso',         preco:3.50, emoji:'🍗', bg:'bg-amarelo', cat:'lanche',    disponivel:true  },
-        { idProduto:3,  nomeProduto:'Pão na chapa',     descricaoProduto:'Com manteiga e queijo',            preco:2.50, emoji:'🥪', bg:'bg-amarelo', cat:'lanche',    disponivel:true  },
-        { idProduto:4,  nomeProduto:'Pastel de queijo', descricaoProduto:'Massa crocante, queijo derretido', preco:4.00, emoji:'🥐', bg:'bg-laranja', cat:'lanche',    disponivel:true  },
-        { idProduto:5,  nomeProduto:'Suco de laranja',  descricaoProduto:'Natural, 300ml',                   preco:4.00, emoji:'🍊', bg:'bg-laranja', cat:'bebida',    disponivel:true  },
-        { idProduto:6,  nomeProduto:'Refrigerante',     descricaoProduto:'Lata 350ml gelada',                preco:3.00, emoji:'🥤', bg:'bg-azul',    cat:'bebida',    disponivel:true  },
-        { idProduto:7,  nomeProduto:'Vitamina',         descricaoProduto:'Banana com leite e mel',           preco:4.50, emoji:'🥛', bg:'bg-roxo',    cat:'bebida',    disponivel:true  },
-        { idProduto:8,  nomeProduto:'Água mineral',     descricaoProduto:'Garrafa 500ml',                    preco:2.00, emoji:'💧', bg:'bg-azul',    cat:'bebida',    disponivel:false },
-        { idProduto:9,  nomeProduto:'Pudim',            descricaoProduto:'Pudim de leite condensado',        preco:3.50, emoji:'🍮', bg:'bg-amarelo', cat:'sobremesa', disponivel:true  },
-        { idProduto:10, nomeProduto:'Bolo de cenoura',  descricaoProduto:'Com cobertura de chocolate',       preco:4.00, emoji:'🍰', bg:'bg-rosa',    cat:'sobremesa', disponivel:true  },
-    ];
-    produtosMapeados = {};
-    produtosLocais.forEach(p => {
-        produtosMapeados[p.idProduto] = p;
-    });
-    render();
-}
-
 function fmt(v) {
-    return 'R$ ' + v.toFixed(2).replace('.', ',');
+    return v ? 'R$ ' + v.toFixed(2).replace('.', ',') : 'R$ 0,00';
 }
 
 /* ── RENDER ── */
@@ -77,13 +37,14 @@ function render() {
 
     if (ids.length === 0) {
         lista.innerHTML = '<p class="vazio-msg">Nenhum item no carrinho.</p>';
-        document.getElementById('qtdBadge').textContent    = '0 itens';
-        document.getElementById('totalValor').textContent  = 'R$ 0,00';
-        document.getElementById('btnConfirmar').disabled   = true;
+        document.getElementById('qtdBadge').textContent = '0 itens';
+        document.getElementById('totalValor').textContent = 'R$ 0,00';
+        document.getElementById('btnConfirmar').disabled = true;
         return;
     }
 
-    let total = 0, totalItens = 0;
+    let total = 0;
+    let totalItens = 0;
 
     ids.forEach(id => {
         const p = produtosMapeados[id];
@@ -91,41 +52,37 @@ function render() {
 
         const qtd = carrinho[id];
         const sub = p.preco * qtd;
-        total      += sub;
+        total += sub;
         totalItens += qtd;
 
-        /* Linha no resumo */
-        const rl = document.createElement('div');
-        rl.className = 'resumo-linha';
-        rl.innerHTML = `
-            <span class="resumo-label">${p.nomeProduto} x${qtd}</span>
-            <span class="resumo-valor">${fmt(sub)}</span>`;
-        resumo.appendChild(rl);
+        // Resumo lateral
+        resumo.innerHTML += `
+            <div class="resumo-linha">
+                <span class="resumo-label">${p.nome || p.nomeProduto} x${qtd}</span>
+                <span class="resumo-valor">${fmt(sub)}</span>
+            </div>`;
 
-        /* Item na lista */
-        const row = document.createElement('div');
-        row.className = 'item-row';
-        row.innerHTML = `
-            <div class="item-emoji">${p.emoji}</div>
-            <div class="item-info">
-                <p class="item-nome">${p.nomeProduto}</p>
-                <p class="item-sub">${fmt(p.preco)} / unid.</p>
-            </div>
-            <div class="item-controles">
-                <button class="ctrl-btn remover" onclick="alterar(${p.idProduto}, -1)">−</button>
-                <span class="item-qtd">${qtd}</span>
-                <button class="ctrl-btn" onclick="alterar(${p.idProduto}, +1)">+</button>
-            </div>
-            <span class="item-preco">${fmt(sub)}</span>`;
-        lista.appendChild(row);
+        // Lista principal
+        lista.innerHTML += `
+            <div class="item-row">
+                <div class="item-info">
+                    <p class="item-nome">${p.nome || p.nomeProduto}</p>
+                    <p class="item-sub">${fmt(p.preco)} / unid.</p>
+                </div>
+                <div class="item-controles">
+                    <button class="ctrl-btn" onclick="alterar(${id}, -1)">−</button>
+                    <span class="item-qtd">${qtd}</span>
+                    <button class="ctrl-btn" onclick="alterar(${id}, 1)">+</button>
+                </div>
+                <span class="item-preco">${fmt(sub)}</span>
+            </div>`;
     });
 
-    document.getElementById('qtdBadge').textContent   = totalItens + (totalItens === 1 ? ' item' : ' itens');
-    document.getElementById('totalValor').textContent  = fmt(total);
-    document.getElementById('btnConfirmar').disabled   = false;
+    document.getElementById('qtdBadge').textContent = `${totalItens} ${totalItens === 1 ? 'item' : 'itens'}`;
+    document.getElementById('totalValor').textContent = fmt(total);
+    document.getElementById('btnConfirmar').disabled = false;
 }
 
-/* ── ALTERAR QUANTIDADE ── */
 function alterar(id, delta) {
     carrinho[id] = (carrinho[id] || 0) + delta;
     if (carrinho[id] <= 0) delete carrinho[id];
@@ -133,67 +90,36 @@ function alterar(id, delta) {
     render();
 }
 
-/* ── PAGAMENTO ── */
 function setPag(el) {
     document.querySelectorAll('.pag-btn').forEach(b => b.classList.remove('selected'));
     el.classList.add('selected');
 }
 
-/* ── CONFIRMAR ── */
+/* ── CONFIRMAR PEDIDO ── */
 function confirmar() {
-    const pagamentoSelecionado = document.querySelector('.pag-btn.selected .pag-label').textContent;
-    const observacoes = document.querySelector('.obs-input').value;
+    const pagamento = document.querySelector('.pag-btn.selected .pag-label').textContent;
+    const obs = document.querySelector('.obs-input').value;
 
-    // Montar dados dos itens do pedido
-    const itens = Object.keys(carrinho)
-        .filter(id => carrinho[id] > 0)
-        .map(id => ({
-            idProduto: parseInt(id),
-            quantidade: carrinho[id]
-        }));
+    const itens = Object.keys(carrinho).map(id => ({
+        produtoId: parseInt(id),
+        quantidade: carrinho[id],
+        pagamento: pagamento,
+        observacao: obs
+    }));
 
-    // Criar múltiplos pedidos, um para cada item
-    let pedidosEnviados = 0;
-    let erros = 0;
-
-    itens.forEach(item => {
-        const dadosPedido = {
-            idProduto: item.idProduto,
-            quantidade: item.quantidade
-        };
-
-        fetch('/api/pedidos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dadosPedido)
+    // Envia o primeiro item (ou ajuste para enviar a lista toda se sua API suportar)
+    fetch('/api/pedidos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(itens[0])
+    })
+        .then(res => {
+            if(!res.ok) throw new Error();
+            document.getElementById('modalSucesso').classList.add('show');
+            sessionStorage.removeItem('carrinho');
         })
-        .then(response => {
-            if (!response.ok) throw new Error('Erro ao criar pedido');
-            return response.json();
-        })
-        .then(data => {
-            pedidosEnviados++;
-            idPedidoCriado = data.idPedido;
-
-            if (pedidosEnviados === itens.length) {
-                // Todos os pedidos foram enviados com sucesso
-                const num = '#' + String(Math.floor(Math.random() * 9000) + 1000);
-                document.getElementById('numPedido').textContent = num;
-                document.getElementById('modalSucesso').classList.add('show');
-                sessionStorage.removeItem('carrinho');
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao criar pedido:', error);
-            erros++;
-            if (erros + pedidosEnviados === itens.length) {
-                alert('Erro ao processar alguns pedidos. Tente novamente.');
-            }
-        });
-    });
+        .catch(() => alert("Erro ao enviar pedido ao funcionário."));
 }
 
-/* ── INIT ── */
+// Inicialização
 carregarProdutos();
