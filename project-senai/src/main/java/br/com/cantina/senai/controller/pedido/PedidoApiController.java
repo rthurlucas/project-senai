@@ -19,6 +19,6 @@ public class PedidoApiController {
 
     @PostMapping
     public DTODetalhamentoPedido criar(@RequestBody DTOCadastroPedido dados) {
-        return pedidoService.criarPedido(dados, 1L); // ID fixo por enquanto
+        return pedidoService.criarPedido(dados, 1L);
     }
 }
