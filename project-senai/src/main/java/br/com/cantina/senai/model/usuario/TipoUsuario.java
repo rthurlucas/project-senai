@@ -1,7 +1,7 @@
 package br.com.cantina.senai.model.usuario;
 
 public enum TipoUsuario {
-    PROFESSOR,
-    ALUNO,
-    FUNCIONARIO
+    USUARIO,
+    FUNCIONARIO,
+    ADMIN
 }
