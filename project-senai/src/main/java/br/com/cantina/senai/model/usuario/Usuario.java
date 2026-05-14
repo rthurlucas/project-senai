@@ -1,0 +1,42 @@
+package br.com.cantina.senai.model.usuario;
+
+
+import br.com.cantina.senai.dto.DTOCadastroUsuario;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "usuario")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Usuario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
+    private Long idUsuario;
+    @Column(name = "nome")
+    private String nome;
+    @Column(name = "cpf")
+    private String cpf;
+    @Column(name = "telefone")
+    private String telefone;
+    @Column(name = "email")
+    private String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_usuario")
+    private TipoUsuario tipoUsuario;
+
+  public Usuario(DTOCadastroUsuario dados){
+    this.nome = dados.nome();
+    this.cpf = dados.cpf();
+    this.telefone = dados.telefone();
+    this.email = dados.email();
+    this.tipoUsuario = dados.tipoUsuario();
+  }
+}

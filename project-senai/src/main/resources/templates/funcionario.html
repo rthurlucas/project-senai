@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel – Cantina SENAI</title>
+
+    <!-- Spring Boot -->
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" href="/css/funcionario.css">
+
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-logo">
+        <div class="senai-block">SENAI</div>
+        <div class="nav-divider"></div>
+        <span class="nav-titulo">Cantina SENAI</span>
+        <span class="nav-badge">Painel do Funcionário</span>
+    </div>
+    <div class="nav-avatar">FU</div>
+    <span>Funcionário</span>
+        <a class="btn-sair" th:href="@{/logout}">Sair</a>
+    </div>
+</nav>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+    <button class="tab active" onclick="mostrarTab('pedidos', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+        </svg>
+        Pedidos
+        <span class="tab-count" id="countPedidos">0</span>
+    </button>
+    <button class="tab" onclick="mostrarTab('estoque', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        </svg>
+        Estoque
+    </button>
+</div>
+
+<!-- CONTEÚDO -->
+<div class="page">
+
+    <!-- ── ABA PEDIDOS ── -->
+    <section class="tab-content active" id="tab-pedidos">
+
+        <!-- FILTROS -->
+        <div class="filtros-pedido">
+            <div class="filtro-grupo">
+                <button class="filtro-status active" onclick="filtrarStatus('todos', this)">Todos</button>
+                <button class="filtro-status" onclick="filtrarStatus('pendente', this)">Pendentes</button>
+                <button class="filtro-status" onclick="filtrarStatus('pronto', this)">Prontos</button>
+                <button class="filtro-status" onclick="filtrarStatus('entregue', this)">Entregues</button>
+            </div>
+            <input class="search-input" type="text" placeholder="Buscar por número ou nome..." id="buscaPedido" oninput="renderPedidos()"/>
+        </div>
+
+        <!-- LISTA DE PEDIDOS -->
+        <div class="pedidos-grid" id="listaPedidos"></div>
+        <p class="vazio" id="vazioPedidos" style="display:none">Nenhum pedido encontrado.</p>
+
+    </section>
+
+    <!-- ── ABA ESTOQUE ── -->
+    <section class="tab-content" id="tab-estoque">
+
+        <div class="estoque-header">
+            <div class="filtros-pedido" style="margin-bottom:0">
+                <input class="search-input" type="text" placeholder="Buscar produto..." id="buscaEstoque" oninput="renderEstoque()"/>
+            </div>
+            <button class="btn-add-produto" onclick="abrirModalProduto()">+ Adicionar produto</button>
+        </div>
+
+        <div class="estoque-table-wrap">
+            <table class="estoque-table">
+                <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Descrição</th>
+                    <th>Qtd. em estoque</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody id="tabelaEstoque"></tbody>
+            </table>
+            <p class="vazio" id="vazioEstoque" style="display:none">Nenhum produto encontrado.</p>
+        </div>
+
+    </section>
+
+</div>
+
+<!-- MODAL ATUALIZAR ESTOQUE -->
+<div class="modal-overlay" id="modalEstoque">
+    <div class="modal">
+        <p class="modal-titulo">Atualizar estoque</p>
+        <p class="modal-sub" id="modalProdutoNome"></p>
+        <div class="form-group" style="margin-top:1rem">
+            <label>Nova quantidade</label>
+            <input type="number" id="inputQtd" min="0" placeholder="0" class="modal-input"/>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="fecharModal('modalEstoque')">Cancelar</button>
+            <button class="btn-salvar" onclick="salvarEstoque()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ADICIONAR PRODUTO -->
+<div class="modal-overlay" id="modalProduto">
+    <div class="modal">
+        <p class="modal-titulo">Novo produto</p>
+        <div class="form-group" style="margin-top:1rem">
+            <label>Nome do produto</label>
+            <input type="text" id="inputNomeProduto" placeholder="Ex: Coxinha" class="modal-input"/>
+        </div>
+        <div class="form-group">
+            <label>Descrição</label>
+            <input type="text" id="inputDescProduto" placeholder="Ex: Recheio de frango" class="modal-input"/>
+        </div>
+        <div class="form-group">
+            <label>Quantidade inicial</label>
+            <input type="number" id="inputQtdProduto" min="0" placeholder="0" class="modal-input"/>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="fecharModal('modalProduto')">Cancelar</button>
+            <button class="btn-salvar" onclick="salvarProduto()">Adicionar</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- Spring Boot -->
+<script th:src="@{/js/funcionario.js}"></script>
+<!-- Live Server -->
+<script src="/project-senai-dev/project-senai/src/main/resources/static/js/funcionario.js"></script>
+</body>
+</html>
